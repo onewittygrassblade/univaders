@@ -16,4 +16,10 @@ export default class GameState extends State {
 
     return false;
   }
+
+  update(dt) {
+    this.world.update(dt);
+
+    return false;
+  }
 }
