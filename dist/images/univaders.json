@@ -1,0 +1,36 @@
+{"frames": {
+
+"dragon.png":
+{
+	"frame": {"x":0,"y":0,"w":100,"h":54},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":54},
+	"sourceSize": {"w":100,"h":54}
+},
+"heart.png":
+{
+	"frame": {"x":100,"y":0,"w":31,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":31,"h":21},
+	"sourceSize": {"w":31,"h":21}
+},
+"unicorn.png":
+{
+	"frame": {"x":131,"y":0,"w":45,"h":44},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":44},
+	"sourceSize": {"w":45,"h":44}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "univaders.png",
+	"format": "RGBA8888",
+	"size": {"w":176,"h":54},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:36d339ceb913b251aef2797a19436351:edea109a2607b15eeb9f2242bb5a8bde:8b4c962a350d7332e534a7d31d049eca$"
+}
+}

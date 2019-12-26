@@ -17,7 +17,7 @@ export default class App extends Application {
   static loadAssets() {
     return new Promise((resolve, reject) => {
       loader
-      //   .add('images/assets.json')
+        .add('images/univaders.json')
         .add('fonts/arcade-lowercase-white.fnt')
         .on('error', reject)
         .load(resolve);
@@ -51,7 +51,10 @@ export default class App extends Application {
     );
 
     // context
+    const { textures } = resources['images/univaders.json'];
+
     const context = {
+      textures,
       stage: this.stage,
     };
 

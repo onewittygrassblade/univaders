@@ -1,7 +1,9 @@
 import TitleState from './states/TitleState';
+import GameState from './states/GameState';
 
 const stateClasses = {
   TitleState,
+  GameState,
 };
 
 export default class StateStack {
