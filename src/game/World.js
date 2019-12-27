@@ -1,9 +1,8 @@
-import { Container, Sprite, BitmapText } from '../const/aliases';
-
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 import { UNICORNS, UNICORN_SPACING } from '../const/world';
 
 import Movable from './Movable';
+import UnicornManager from './UnicornManager';
 import ProjectileManager from './ProjectileManager';
 
 import contain from '../helpers/contain';
@@ -21,15 +20,15 @@ export default class World {
 
   createScene() {
     // unicorns
-    this.unicorns = new Container();
-    for (let i = 0; i < UNICORNS.x; i++) {
-      for (let j = 0; j < UNICORNS.y; j++) {
-        const unicorn = new Sprite(this.textures['unicorn.png']);
-        unicorn.x = i * UNICORN_SPACING.x;
-        unicorn.y = j * UNICORN_SPACING.y;
-        this.unicorns.addChild(unicorn);
-      }
-    }
+    this.unicornManager = new UnicornManager(
+      this.textures['unicorn.png'],
+      UNICORNS.x,
+      UNICORNS.y,
+      UNICORN_SPACING.x,
+      UNICORN_SPACING.y
+    );
+    this.unicorns = this.unicornManager.build(); // Container
+
     this.unicorns.x = RENDERER_WIDTH / 2 - this.unicorns.width / 2;
     this.unicorns.y = 30;
     this.container.addChild(this.unicorns);
@@ -66,6 +65,7 @@ export default class World {
 
   update(dt) {
     this.dragon.update(dt);
+    this.unicornManager.update(dt);
     this.projectileManager.update(dt);
 
     this.containDragon();
@@ -105,5 +105,11 @@ export default class World {
         projectile.shouldBeRemoved = true;
       }
     });
+  }
+
+  hasNoUnicorns() {
+    return this.unicorns.children.filter(
+      (unicornSprite) => unicornSprite.visible === true
+    ).length === 0;
   }
 }

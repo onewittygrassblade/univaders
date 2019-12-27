@@ -20,6 +20,15 @@ export default class GameState extends State {
   update(dt) {
     this.world.update(dt);
 
+    if (this.world.hasNoUnicorns()) {
+      this.gameOver();
+    }
+
     return false;
+  }
+
+  gameOver() {
+    this.stateStack.popState();
+    this.stateStack.pushState('GameOverState');
   }
 }
