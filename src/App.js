@@ -41,13 +41,17 @@ export default class App extends Application {
     this.events = [];
     window.addEventListener(
       'keydown',
-      (e) => this.events.push(e),
-      false
+      (e) => {
+        e.preventDefault();
+        this.events.push(e);
+      }
     );
     window.addEventListener(
       'keyup',
-      (e) => this.events.push(e),
-      false
+      (e) => {
+        e.preventDefault();
+        this.events.push(e);
+      }
     );
 
     // context

@@ -9,8 +9,8 @@ export default class State {
   }
 
   /* eslint-disable class-methods-use-this */
-  handleEvent(e) {
-    e.preventDefault();
+  handleEvent() {
+    return false;
   }
 
   update() {
