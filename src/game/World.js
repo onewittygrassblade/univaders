@@ -3,7 +3,8 @@ import { Container, Sprite, BitmapText } from '../const/aliases';
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 import { UNICORNS, UNICORN_SPACING } from '../const/world';
 
-import Dragon from './Dragon';
+import Movable from './Movable';
+import ProjectileManager from './ProjectileManager';
 
 import contain from '../helpers/contain';
 
@@ -13,6 +14,8 @@ export default class World {
     this.textures = textures;
 
     this.createScene();
+    this.projectileManager = new ProjectileManager(this.dragon, this.textures['heart.png']);
+    this.container.addChild(this.projectileManager.container);
   }
 
   createScene() {
@@ -31,7 +34,7 @@ export default class World {
     this.container.addChild(this.unicorns);
 
     // dragon
-    this.dragon = new Dragon(this.textures['dragon.png']);
+    this.dragon = new Movable(this.textures['dragon.png'], 0.2);
     this.dragon.sprite.x = RENDERER_WIDTH / 2 - this.dragon.sprite.width / 2;
     this.dragon.sprite.y = RENDERER_HEIGHT - this.dragon.sprite.height;
     this.container.addChild(this.dragon.sprite);
@@ -46,15 +49,23 @@ export default class World {
         case 39:
           this.dragon.move('right');
           break;
+        case 32:
+          this.projectileManager.fire();
+          break;
         default:
       }
-    } else if (e.type === 'keyup' && (e.keyCode === 37 || e.keyCode === 39)) {
-      this.dragon.stop();
+    } else if (e.type === 'keyup') {
+      if (e.keyCode === 37 || e.keyCode === 39) {
+        this.dragon.stop();
+      } else if (e.keyCode === 32) {
+        this.projectileManager.stopFiring();
+      }
     }
   }
 
   update(dt) {
     this.dragon.update(dt);
+    this.projectileManager.update(dt);
     this.containDragon();
   }
 
