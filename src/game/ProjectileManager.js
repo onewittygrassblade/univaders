@@ -47,6 +47,13 @@ export default class ProjectileManager {
     }
 
     this.projectiles.forEach((projectile) => {
+      if (projectile.shouldBeRemoved) {
+        this.container.removeChild(projectile.sprite);
+        this.projectiles.splice(this.projectiles.indexOf(projectile), 1);
+      }
+    });
+
+    this.projectiles.forEach((projectile) => {
       projectile.update(dt);
     });
 

@@ -7,6 +7,7 @@ import Movable from './Movable';
 import ProjectileManager from './ProjectileManager';
 
 import contain from '../helpers/contain';
+import hitTestRectangle from '../helpers/hitTestRectangle';
 
 export default class World {
   constructor(gameContainer, textures) {
@@ -66,7 +67,10 @@ export default class World {
   update(dt) {
     this.dragon.update(dt);
     this.projectileManager.update(dt);
+
     this.containDragon();
+
+    this.checkCollisions();
   }
 
   containDragon() {
@@ -87,5 +91,19 @@ export default class World {
         this.dragon.sprite.x = RENDERER_WIDTH - this.dragon.sprite.width;
       }
     }
+  }
+
+  checkCollisions() {
+    this.projectileManager.projectiles.forEach((projectile) => {
+      const hitUnicornSprite = this.unicorns.children.find(
+        (unicornSprite) => unicornSprite.visible
+          && hitTestRectangle(projectile.sprite, unicornSprite, true)
+      );
+
+      if (hitUnicornSprite) {
+        hitUnicornSprite.visible = false;
+        projectile.shouldBeRemoved = true;
+      }
+    });
   }
 }
