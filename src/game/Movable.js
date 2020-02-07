@@ -1,8 +1,8 @@
 import { Sprite } from '../const/aliases';
 
-export default class Movable {
+export default class Movable extends Sprite {
   constructor(texture, velocity) {
-    this.sprite = new Sprite(texture);
+    super(texture);
     this.velocity = velocity;
     this.vx = 0;
     this.vy = 0;
@@ -32,7 +32,7 @@ export default class Movable {
   }
 
   update(dt) {
-    this.sprite.x += this.vx * dt;
-    this.sprite.y += this.vy * dt;
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
   }
 }

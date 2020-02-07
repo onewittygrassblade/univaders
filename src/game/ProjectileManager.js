@@ -4,27 +4,39 @@ import { RENDERER_HEIGHT } from '../const/app';
 
 import Movable from './Movable';
 
+const isOutsideView = (sprite) => (
+  sprite.y < -sprite.height || sprite.y > RENDERER_HEIGHT
+);
+
 export default class ProjectileManager {
-  constructor(parent, texture) {
+  constructor(parent, texture, startPos, fireInterval, projectileSpeed) {
     this.parent = parent;
     this.texture = texture;
+    this.startPos = startPos;
 
     this.projectiles = [];
     this.container = new ParticleContainer();
 
     this.isFiring = false;
     this.fireCountdown = 0;
-    this.fireInterval = 500;
+    this.fireInterval = fireInterval;
+
+    this.projectileSpeed = projectileSpeed;
   }
 
   addProjectile(projectile) {
     this.projectiles.push(projectile);
 
-    projectile.sprite.x = this.parent.sprite.x + this.parent.sprite.width / 2 - projectile.sprite.width / 2; // eslint-disable-line max-len
-    projectile.sprite.y = RENDERER_HEIGHT - this.parent.sprite.height - projectile.sprite.height;
-    this.container.addChild(projectile.sprite);
+    projectile.x = this.parent.getGlobalPosition().x + this.parent.width / 2 - projectile.width / 2;
 
-    projectile.move('up');
+    if (this.startPos === 'top') {
+      projectile.y = this.parent.getGlobalPosition().y - projectile.height;
+      projectile.move('up');
+    } else if (this.startPos === 'bottom') {
+      projectile.y = this.parent.getGlobalPosition().y + this.parent.height;
+      projectile.move('down');
+    }
+    this.container.addChild(projectile);
   }
 
   clear() {
@@ -41,27 +53,34 @@ export default class ProjectileManager {
   }
 
   update(dt) {
-    while (this.projectiles.length > 0 && this.projectiles[0].sprite.y < -this.projectiles[0].sprite.height) { // eslint-disable-line max-len
-      this.container.removeChild(this.projectiles[0].sprite);
+    // Remove projectiles out of view
+    while (this.projectiles.length > 0 && isOutsideView(this.projectiles[0])) {
+      this.container.removeChild(this.projectiles[0]);
       this.projectiles.shift();
     }
 
+    // Remove projectiles that have collided with something
     this.projectiles.forEach((projectile) => {
       if (projectile.shouldBeRemoved) {
-        this.container.removeChild(projectile.sprite);
+        this.container.removeChild(projectile);
         this.projectiles.splice(this.projectiles.indexOf(projectile), 1);
       }
     });
 
+    // Update remaining projectiles
     this.projectiles.forEach((projectile) => {
       projectile.update(dt);
     });
 
-    if (this.isFiring && this.fireCountdown <= 0) {
-      this.addProjectile(new Movable(this.texture, 0.4));
-      this.fireCountdown = this.fireInterval;
-    } else if (this.fireCountdown > 0) {
+    // Process firing
+    if (this.fireCountdown > 0) {
       this.fireCountdown -= dt;
+      return;
+    }
+
+    if (this.isFiring) {
+      this.addProjectile(new Movable(this.texture, this.projectileSpeed));
+      this.fireCountdown = this.fireInterval;
     }
   }
 }

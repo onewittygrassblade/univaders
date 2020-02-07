@@ -196,7 +196,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">heart.png</key>
+            <key type="filename">heart_blue.png</key>
+            <key type="filename">heart_red.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -230,8 +231,9 @@
         <key>fileList</key>
         <array>
             <filename>dragon.png</filename>
-            <filename>heart.png</filename>
             <filename>unicorn.png</filename>
+            <filename>heart_blue.png</filename>
+            <filename>heart_red.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

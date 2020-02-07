@@ -20,7 +20,11 @@ export default class GameState extends State {
   update(dt) {
     this.world.update(dt);
 
-    if (this.world.hasNoUnicorns()) {
+    if (!this.world.hasAlivePlayer) {
+      this.gameOver();
+    }
+
+    if (!this.world.hasUnicorns) {
       this.gameOver();
     }
 
