@@ -60,6 +60,7 @@ export default class App extends Application {
     const context = {
       textures,
       stage: this.stage,
+      gameStatus: '',
     };
 
     // state stack

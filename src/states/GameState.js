@@ -4,6 +4,7 @@ import World from '../game/World';
 export default class GameState extends State {
   constructor(stateStack, context) {
     super(stateStack, context);
+    this.context.gameStatus = 'running';
     this.world = new World(
       this.container,
       context.textures,
@@ -21,10 +22,12 @@ export default class GameState extends State {
     this.world.update(dt);
 
     if (!this.world.hasAlivePlayer) {
+      this.context.gameStatus = 'failure';
       this.gameOver();
     }
 
     if (!this.world.hasUnicorns) {
+      this.context.gameStatus = 'success';
       this.gameOver();
     }
 

@@ -12,7 +12,10 @@ export default class GameOverState extends State {
   }
 
   createTitle() {
-    const title = new BitmapText('game over', { font: '180px arcade-lowercase-white' });
+    const text = this.context.gameStatus === 'success'
+      ? 'wahoo!'
+      : 'game over';
+    const title = new BitmapText(text, { font: '180px arcade-lowercase-white' });
     title.x = RENDERER_WIDTH / 2 - title.width / 2;
     title.y = 200;
     this.container.addChild(title);
