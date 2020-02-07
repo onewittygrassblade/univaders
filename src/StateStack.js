@@ -1,10 +1,12 @@
 import TitleState from './states/TitleState';
 import GameState from './states/GameState';
+import PauseState from './states/PauseState';
 import GameOverState from './states/GameOverState';
 
 const stateClasses = {
   TitleState,
   GameState,
+  PauseState,
   GameOverState,
 };
 

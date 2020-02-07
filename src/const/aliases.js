@@ -8,4 +8,5 @@ export const { Container } = PIXI;
 export const { ParticleContainer } = PIXI;
 export const { Sprite } = PIXI;
 export const { BitmapText } = PIXI;
+export const { Graphics } = PIXI;
 /* eslint-enable no-undef */

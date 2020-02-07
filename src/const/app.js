@@ -4,5 +4,6 @@ export const RENDERER_HEIGHT = 720;
 export const STATES = [
   'TitleState',
   'GameState',
+  'PauseState',
   'GameOverState',
 ];

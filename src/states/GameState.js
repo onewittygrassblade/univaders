@@ -15,6 +15,10 @@ export default class GameState extends State {
     super.handleEvent(e);
     this.world.handleEvent(e);
 
+    if (e.type === 'keyup' && e.keyCode === 27) {
+      this.stateStack.pushState('PauseState');
+    }
+
     return false;
   }
 
