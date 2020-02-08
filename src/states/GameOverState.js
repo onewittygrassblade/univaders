@@ -15,14 +15,14 @@ export default class GameOverState extends State {
     const text = this.context.gameStatus === 'success'
       ? 'wahoo!'
       : 'game over';
-    const title = new BitmapText(text, { font: '180px arcade-lowercase-white' });
+    const title = new BitmapText(text, { font: '180px arcade-white' });
     title.x = RENDERER_WIDTH / 2 - title.width / 2;
     title.y = 200;
     this.container.addChild(title);
   }
 
   createHint() {
-    const hint = new BitmapText('press space to go back to title', { font: '72px arcade-lowercase-white' });
+    const hint = new BitmapText('press space to go back to title', { font: '72px arcade-white' });
     hint.x = RENDERER_WIDTH / 2 - hint.width / 2;
     hint.y = 400;
     this.container.addChild(hint);

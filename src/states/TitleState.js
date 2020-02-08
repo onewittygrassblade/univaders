@@ -12,14 +12,14 @@ export default class TitleState extends State {
   }
 
   createTitle() {
-    const title = new BitmapText('univaders', { font: '180px arcade-lowercase-white' });
+    const title = new BitmapText('univaders', { font: '180px arcade-white' });
     title.x = RENDERER_WIDTH / 2 - title.width / 2;
     title.y = 200;
     this.container.addChild(title);
   }
 
   createHint() {
-    const hint = new BitmapText('press space to start', { font: '72px arcade-lowercase-white' });
+    const hint = new BitmapText('press space to start', { font: '72px arcade-white' });
     hint.x = RENDERER_WIDTH / 2 - hint.width / 2;
     hint.y = 400;
     this.container.addChild(hint);

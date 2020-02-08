@@ -18,7 +18,7 @@ export default class App extends Application {
     return new Promise((resolve, reject) => {
       loader
         .add('images/univaders.json')
-        .add('fonts/arcade-lowercase-white.fnt')
+        .add('fonts/arcade-white.fnt')
         .on('error', reject)
         .load(resolve);
     });

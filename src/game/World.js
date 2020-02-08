@@ -73,7 +73,7 @@ export default class World {
   createLivesDisplay() {
     const livesContainer = new Container();
 
-    const livesText = new BitmapText('LIVES', { font: '72px arcade-lowercase-white' });
+    const livesText = new BitmapText('LIVES', { font: '72px arcade-white' });
     livesContainer.addChild(livesText);
 
     this.livesSpriteContainer = new Container();

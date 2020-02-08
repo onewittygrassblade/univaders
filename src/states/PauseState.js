@@ -23,12 +23,12 @@ export default class PauseState extends State {
   }
 
   createTexts() {
-    const messageText = new BitmapText('Game paused', { font: '180px arcade-lowercase-white' });
+    const messageText = new BitmapText('Game paused', { font: '180px arcade-white' });
     messageText.x = RENDERER_WIDTH / 2 - messageText.width / 2;
     messageText.y = 200;
     this.container.addChild(messageText);
 
-    const hintText = new BitmapText('Press ESC to resume', { font: '72px arcade-lowercase-white' });
+    const hintText = new BitmapText('Press ESC to resume', { font: '72px arcade-white' });
     hintText.x = RENDERER_WIDTH / 2 - hintText.width / 2;
     hintText.y = 400;
     this.container.addChild(hintText);
