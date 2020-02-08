@@ -36,6 +36,7 @@ export default class GameState extends State {
 
     if (!this.world.hasUnicorns) {
       this.context.gameStatus = 'success';
+      this.context.score = this.world.unicorns.length;
       this.gameOver();
     }
 

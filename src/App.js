@@ -61,6 +61,7 @@ export default class App extends Application {
       textures,
       stage: this.stage,
       gameStatus: '',
+      score: 0,
     };
 
     // state stack

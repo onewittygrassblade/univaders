@@ -15,6 +15,7 @@ export default class World {
     this.container = gameContainer;
     this.textures = textures;
 
+    this.score = 0;
     this.numberOfLives = INITIAL_NUMBER_OF_LIVES;
     this.hasAlivePlayer = true;
     this.hasUnicorns = true;
@@ -22,6 +23,7 @@ export default class World {
     this.createScene();
     this.createDragonProjectileManager();
     this.createUnicornProjectileManagers();
+    this.createScoreDisplay();
     this.createLivesDisplay();
   }
 
@@ -70,6 +72,17 @@ export default class World {
     });
   }
 
+  createScoreDisplay() {
+    const scoreContainer = new Container();
+
+    this.scoreText = new BitmapText(`${this.score} MONTHS`, { font: '72px arcade-white' } );
+    scoreContainer.addChild(this.scoreText);
+
+    scoreContainer.x = 20;
+    scoreContainer.y = 20;
+    this.container.addChild(scoreContainer);
+  }
+
   createLivesDisplay() {
     const livesContainer = new Container();
 
@@ -86,7 +99,7 @@ export default class World {
 
     livesText.y = livesContainer.height / 2 - livesText.height / 2;
 
-    livesContainer.x = RENDERER_WIDTH - livesContainer.width - 15;
+    livesContainer.x = RENDERER_WIDTH - livesContainer.width - 20;
     livesContainer.y = 10;
     this.container.addChild(livesContainer);
   }
@@ -209,6 +222,8 @@ export default class World {
         }
 
         projectile.shouldBeRemoved = true;
+
+        this.scoreText.text = `${++this.score} MONTHS`;
       }
     });
 
