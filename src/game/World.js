@@ -1,5 +1,7 @@
+import { Container, Sprite, BitmapText } from '../const/aliases';
+
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
-import { UNICORNS, UNICORN_SPACING } from '../const/world';
+import { UNICORNS, UNICORN_SPACING, INITIAL_NUMBER_OF_LIVES } from '../const/world';
 
 import Movable from './Movable';
 import UnicornManager from './UnicornManager';
@@ -13,12 +15,14 @@ export default class World {
     this.container = gameContainer;
     this.textures = textures;
 
+    this.numberOfLives = INITIAL_NUMBER_OF_LIVES;
     this.hasAlivePlayer = true;
     this.hasUnicorns = true;
 
     this.createScene();
     this.createDragonProjectileManager();
     this.createUnicornProjectileManagers();
+    this.createLivesDisplay();
   }
 
   createScene() {
@@ -63,6 +67,38 @@ export default class World {
       );
       this.unicornProjectileManagers.push(projectileManager);
       this.container.addChild(projectileManager.container);
+    });
+  }
+
+  createLivesDisplay() {
+    const livesContainer = new Container();
+
+    const livesText = new BitmapText('LIVES', { font: '72px arcade-lowercase-white' });
+    livesContainer.addChild(livesText);
+
+    this.livesSpriteContainer = new Container();
+    for (let i = 0; i < this.numberOfLives; i++) {
+      const life = new Sprite(this.textures['dragon.png']);
+      life.x = i * (life.width + 15) + livesText.width + 30;
+      this.livesSpriteContainer.addChild(life);
+    }
+    livesContainer.addChild(this.livesSpriteContainer);
+
+    livesText.y = livesContainer.height / 2 - livesText.height / 2;
+
+    livesContainer.x = RENDERER_WIDTH - livesContainer.width - 15;
+    livesContainer.y = 10;
+    this.container.addChild(livesContainer);
+  }
+
+  reset() {
+    this.hasAlivePlayer = true;
+
+    this.dragon.x = RENDERER_WIDTH / 2 - this.dragon.width / 2;
+
+    this.dragonProjectileManager.clear();
+    this.unicornProjectileManagers.forEach((projectileManager) => {
+      projectileManager.clear();
     });
   }
 
@@ -143,6 +179,7 @@ export default class World {
   }
 
   checkCollisions() {
+    // dragon hearts vs. unicorns
     this.dragonProjectileManager.projectiles.forEach((projectile) => {
       const hitUnicorn = this.unicorns.find(
         (unicorn) => unicorn.visible
@@ -175,14 +212,26 @@ export default class World {
       }
     });
 
+    // unicorn hearts vs. dragon
     this.unicornProjectileManagers.forEach((projectileManager) => {
       const hitProjectile = projectileManager.projectiles.find(
         (projectile) => hitTestRectangle(projectile, this.dragon, true)
       );
 
       if (hitProjectile) {
+        this.loseLife();
         this.hasAlivePlayer = false;
       }
     });
+  }
+
+  hasLives() {
+    return this.numberOfLives > 0;
+  }
+
+  loseLife() {
+    this.livesSpriteContainer.removeChildAt(this.livesSpriteContainer.children.length - 1);
+
+    this.numberOfLives -= 1;
   }
 }

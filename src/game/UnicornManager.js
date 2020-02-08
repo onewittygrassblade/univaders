@@ -37,7 +37,7 @@ export default class UnicornManager {
     }
 
     this.container.x = RENDERER_WIDTH / 2 - this.container.width / 2;
-    this.container.y = 30;
+    this.container.y = 120;
 
     this.width = this.container.width; // Need to save this for hasReachedEdge
   }

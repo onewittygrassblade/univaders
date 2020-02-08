@@ -26,8 +26,12 @@ export default class GameState extends State {
     this.world.update(dt);
 
     if (!this.world.hasAlivePlayer) {
-      this.context.gameStatus = 'failure';
-      this.gameOver();
+      if (this.world.hasLives()) {
+        this.world.reset();
+      } else {
+        this.context.gameStatus = 'failure';
+        this.gameOver();
+      }
     }
 
     if (!this.world.hasUnicorns) {
