@@ -36,7 +36,6 @@ export default class GameState extends State {
 
     if (!this.world.hasUnicorns) {
       this.context.gameStatus = 'success';
-      this.context.score = this.world.unicorns.length;
       this.gameOver();
     }
 
@@ -44,6 +43,9 @@ export default class GameState extends State {
   }
 
   gameOver() {
+    this.context.score = this.world.unicorns.filter(
+      (unicorn) => !unicorn.visible
+    ).length;
     this.stateStack.popState();
     this.stateStack.pushState('GameOverState');
   }
