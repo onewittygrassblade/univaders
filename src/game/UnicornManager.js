@@ -11,7 +11,7 @@ export default class UnicornManager {
     this.spacingY = spacingY;
 
     this.moveCountdown = 0;
-    this.moveInterval = 500;
+    this.moveInterval = 1000;
     this.dx = 10;
     this.dy = 0;
 
@@ -40,6 +40,14 @@ export default class UnicornManager {
     this.container.y = 140;
 
     this.width = this.container.width; // Need to save this for hasReachedEdge
+  }
+
+  increaseMoveRate() {
+    if (this.moveInterval <= 200) {
+      return;
+    }
+
+    this.moveInterval -= 20;
   }
 
   update(dt) {

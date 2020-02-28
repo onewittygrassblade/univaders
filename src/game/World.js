@@ -278,6 +278,8 @@ export default class World {
 
         this.score += 1;
         this.scoreText.text = `${this.score} MONTHS`;
+
+        this.unicornManager.increaseMoveRate();
       }
     });
 
