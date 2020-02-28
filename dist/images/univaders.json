@@ -1,8 +1,16 @@
 {"frames": {
 
+"beer.png":
+{
+	"frame": {"x":0,"y":0,"w":20,"h":40},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":20,"h":40},
+	"sourceSize": {"w":20,"h":40}
+},
 "dragon.png":
 {
-	"frame": {"x":0,"y":0,"w":100,"h":54},
+	"frame": {"x":20,"y":0,"w":100,"h":54},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":54},
@@ -10,7 +18,7 @@
 },
 "heart_blue.png":
 {
-	"frame": {"x":0,"y":54,"w":31,"h":21},
+	"frame": {"x":120,"y":0,"w":31,"h":21},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":31,"h":21},
@@ -18,15 +26,23 @@
 },
 "heart_red.png":
 {
-	"frame": {"x":31,"y":54,"w":31,"h":21},
+	"frame": {"x":151,"y":0,"w":31,"h":21},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":31,"h":21},
 	"sourceSize": {"w":31,"h":21}
 },
+"pizza.png":
+{
+	"frame": {"x":182,"y":0,"w":52,"h":52},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":52,"h":52},
+	"sourceSize": {"w":52,"h":52}
+},
 "unicorn.png":
 {
-	"frame": {"x":62,"y":54,"w":45,"h":44},
+	"frame": {"x":234,"y":0,"w":45,"h":44},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":44},
@@ -37,8 +53,8 @@
 	"version": "1.0",
 	"image": "univaders.png",
 	"format": "RGBA8888",
-	"size": {"w":107,"h":98},
+	"size": {"w":279,"h":54},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:24216260abf8fdd704811f6824ccc3d9:0e3bd0d0fd150c671247f42d43c65b97:8b4c962a350d7332e534a7d31d049eca$"
+	"smartupdate": "$TexturePacker:SmartUpdate:3d6b4e6910c404d5dfdeedbdc0696fc8:12f2799a0ff8ab3b6a797c6e1d685ee2:8b4c962a350d7332e534a7d31d049eca$"
 }
 }

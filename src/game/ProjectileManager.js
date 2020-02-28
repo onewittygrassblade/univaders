@@ -52,6 +52,14 @@ export default class ProjectileManager {
     this.isFiring = false;
   }
 
+  increaseFireRate() {
+    if (this.fireInterval <= 200) {
+      return;
+    }
+
+    this.fireInterval -= 100;
+  }
+
   update(dt) {
     // Remove projectiles out of view
     while (this.projectiles.length > 0 && isOutsideView(this.projectiles[0])) {

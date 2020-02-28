@@ -1,14 +1,21 @@
 import { Container, Sprite, BitmapText } from '../const/aliases';
 
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
-import { UNICORNS, UNICORN_SPACING, INITIAL_NUMBER_OF_LIVES } from '../const/world';
+import {
+  UNICORNS,
+  UNICORN_SPACING,
+  INITIAL_NUMBER_OF_LIVES,
+  MAX_NUMBER_OF_LIVES,
+} from '../const/world';
 
 import Movable from './Movable';
 import UnicornManager from './UnicornManager';
 import ProjectileManager from './ProjectileManager';
+import PickUpManager from './PickUpManager';
 
 import contain from '../helpers/contain';
 import hitTestRectangle from '../helpers/hitTestRectangle';
+import { randomInt } from '../helpers/RandomNumbers';
 
 export default class World {
   constructor(gameContainer, textures) {
@@ -25,6 +32,8 @@ export default class World {
     this.createUnicornProjectileManagers();
     this.createScoreDisplay();
     this.createLivesDisplay();
+    this.createPickUpManager();
+    this.createPickUpActions();
   }
 
   createScene() {
@@ -51,7 +60,7 @@ export default class World {
       this.dragon,
       this.textures['heart_red.png'],
       'top',
-      500,
+      600,
       0.4
     );
     this.container.addChild(this.dragonProjectileManager.container);
@@ -75,7 +84,7 @@ export default class World {
   createScoreDisplay() {
     const scoreContainer = new Container();
 
-    this.scoreText = new BitmapText(`${this.score} MONTHS`, { font: '72px arcade-white' } );
+    this.scoreText = new BitmapText(`${this.score} MONTHS`, { font: '72px arcade-white' });
     scoreContainer.addChild(this.scoreText);
 
     scoreContainer.x = 20;
@@ -89,19 +98,31 @@ export default class World {
     const livesText = new BitmapText('LIVES', { font: '72px arcade-white' });
     livesContainer.addChild(livesText);
 
+    let lifeWidth;
+
     this.livesSpriteContainer = new Container();
     for (let i = 0; i < this.numberOfLives; i++) {
       const life = new Sprite(this.textures['dragon.png']);
-      life.x = i * (life.width + 15) + livesText.width + 30;
+      lifeWidth = life.width;
+      life.x = i * (lifeWidth + 15);
       this.livesSpriteContainer.addChild(life);
     }
+    this.livesSpriteContainer.x = livesText.width + 30;
     livesContainer.addChild(this.livesSpriteContainer);
 
     livesText.y = livesContainer.height / 2 - livesText.height / 2;
 
-    livesContainer.x = RENDERER_WIDTH - livesContainer.width - 20;
+    livesContainer.x = RENDERER_WIDTH
+                        - livesContainer.width
+                        - ((MAX_NUMBER_OF_LIVES - this.numberOfLives) * (lifeWidth + 15))
+                        - 20;
     livesContainer.y = 10;
     this.container.addChild(livesContainer);
+  }
+
+  createPickUpManager() {
+    this.pickUpManager = new PickUpManager([this.textures['pizza.png'], this.textures['beer.png']]);
+    this.container.addChild(this.pickUpManager.container);
   }
 
   reset() {
@@ -110,6 +131,37 @@ export default class World {
     this.dragon.x = RENDERER_WIDTH / 2 - this.dragon.width / 2;
 
     this.dragonProjectileManager.clear();
+    this.unicornProjectileManagers.forEach((projectileManager) => {
+      projectileManager.clear();
+    });
+
+    this.pickUpManager.clear();
+  }
+
+  createPickUpActions() {
+    this.pickUpActions = [
+      this.gainLife.bind(this),
+      this.speedUpFire.bind(this),
+      this.clearUnicornProjectiles.bind(this),
+    ];
+  }
+
+  gainLife() {
+    const life = new Sprite(this.textures['dragon.png']);
+    life.x = this.numberOfLives * (life.width + 15);
+    this.livesSpriteContainer.addChild(life);
+
+    this.numberOfLives += 1;
+    if (this.numberOfLives === MAX_NUMBER_OF_LIVES) {
+      this.pickUpActions.shift();
+    }
+  }
+
+  speedUpFire() {
+    this.dragonProjectileManager.increaseFireRate();
+  }
+
+  clearUnicornProjectiles() {
     this.unicornProjectileManagers.forEach((projectileManager) => {
       projectileManager.clear();
     });
@@ -143,6 +195,7 @@ export default class World {
     this.unicornManager.update(dt);
     this.dragonProjectileManager.update(dt);
     this.unicornProjectileManagers.forEach((projectileManager) => projectileManager.update(dt));
+    this.pickUpManager.update(dt);
 
     this.containDragon();
     this.checkUnicornFire();
@@ -223,7 +276,8 @@ export default class World {
 
         projectile.shouldBeRemoved = true;
 
-        this.scoreText.text = `${++this.score} MONTHS`;
+        this.score += 1;
+        this.scoreText.text = `${this.score} MONTHS`;
       }
     });
 
@@ -238,6 +292,19 @@ export default class World {
         this.hasAlivePlayer = false;
       }
     });
+
+    // dragon hearts vs. pick ups
+    this.dragonProjectileManager.projectiles.forEach((projectile) => {
+      const hitPickUp = this.pickUpManager.pickUps.find(
+        (pickUp) => hitTestRectangle(projectile, pickUp, true)
+      );
+
+      if (hitPickUp) {
+        this.pickUpActions[randomInt(0, this.pickUpActions.length - 1)]();
+        projectile.shouldBeRemoved = true;
+        hitPickUp.shouldBeRemoved = true;
+      }
+    });
   }
 
   hasLives() {
@@ -245,8 +312,10 @@ export default class World {
   }
 
   loseLife() {
-    this.livesSpriteContainer.removeChildAt(this.livesSpriteContainer.children.length - 1);
-
+    if (this.numberOfLives === MAX_NUMBER_OF_LIVES) {
+      this.pickUpActions.unshift(this.gainLife);
+    }
     this.numberOfLives -= 1;
+    this.livesSpriteContainer.removeChildAt(this.livesSpriteContainer.children.length - 1);
   }
 }

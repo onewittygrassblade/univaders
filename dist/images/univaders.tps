@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>4</int>
         <key>texturePackerVersion</key>
-        <string>5.2.0</string>
+        <string>5.3.0</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -181,6 +181,21 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">beer.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>10,20,19,40</rect>
+                <key>scale9Paddings</key>
+                <rect>10,20,19,40</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">dragon.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -212,6 +227,21 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">pizza.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>26,26,52,52</rect>
+                <key>scale9Paddings</key>
+                <rect>26,26,52,52</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">unicorn.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -234,6 +264,8 @@
             <filename>unicorn.png</filename>
             <filename>heart_blue.png</filename>
             <filename>heart_red.png</filename>
+            <filename>beer.png</filename>
+            <filename>pizza.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
