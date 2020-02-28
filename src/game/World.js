@@ -26,6 +26,7 @@ export default class World {
     this.numberOfLives = INITIAL_NUMBER_OF_LIVES;
     this.hasAlivePlayer = true;
     this.hasUnicorns = true;
+    this.unicornsHaveReachedBottom = false;
 
     this.createScene();
     this.createDragonProjectileManager();
@@ -200,6 +201,7 @@ export default class World {
     this.containDragon();
     this.checkUnicornFire();
     this.checkCollisions();
+    this.checkIfUnicornsHaveReachedBottom();
   }
 
   containDragon() {
@@ -307,6 +309,21 @@ export default class World {
         hitPickUp.shouldBeRemoved = true;
       }
     });
+
+    // dragon vs. unicorns
+    const hitUnicorn = this.unicorns.find(
+      (unicorn) => unicorn.visible && hitTestRectangle(unicorn, this.dragon, true)
+    );
+
+    if (hitUnicorn) {
+      this.unicornsHaveReachedBottom = true;
+    }
+  }
+
+  checkIfUnicornsHaveReachedBottom() {
+    if (this.unicornManager.hasReachedBottom()) {
+      this.unicornsHaveReachedBottom = true;
+    }
   }
 
   hasLives() {

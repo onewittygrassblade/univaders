@@ -1,6 +1,6 @@
 import { Container, Sprite } from '../const/aliases';
 
-import { RENDERER_WIDTH } from '../const/app';
+import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 
 export default class UnicornManager {
   constructor(texture, rows, cols, spacingX, spacingY) {
@@ -69,6 +69,10 @@ export default class UnicornManager {
   hasReachedEdge() {
     return (this.container.x <= 30 && this.dx < 0)
       || (this.container.x >= RENDERER_WIDTH - this.width - 30 && this.dx > 0);
+  }
+
+  hasReachedBottom() {
+    return this.container.y >= RENDERER_HEIGHT - this.container.height;
   }
 
   getUnicornAbove(refUnicorn) {
