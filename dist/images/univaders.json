@@ -24,9 +24,17 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":31,"h":21},
 	"sourceSize": {"w":31,"h":21}
 },
+"heart_green_small.png":
+{
+	"frame": {"x":31,"y":54,"w":15,"h":11},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":15,"h":11},
+	"sourceSize": {"w":15,"h":11}
+},
 "heart_red.png":
 {
-	"frame": {"x":31,"y":54,"w":31,"h":21},
+	"frame": {"x":46,"y":54,"w":31,"h":21},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":31,"h":21},
@@ -34,7 +42,7 @@
 },
 "heart_white_small.png":
 {
-	"frame": {"x":62,"y":54,"w":15,"h":11},
+	"frame": {"x":77,"y":54,"w":15,"h":11},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":15,"h":11},
@@ -63,6 +71,6 @@
 	"format": "RGBA8888",
 	"size": {"w":120,"h":127},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:ae1cb2dff10aa61b13b7f632575e66c7:9e7baabc776a2b96e18a6d9c944498ca:8b4c962a350d7332e534a7d31d049eca$"
+	"smartupdate": "$TexturePacker:SmartUpdate:191e099ca609ffcd528cab421736b66a:959f8e1088d679e1d66557331d6f2332:8b4c962a350d7332e534a7d31d049eca$"
 }
 }

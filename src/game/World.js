@@ -13,6 +13,7 @@ import UnicornManager from './UnicornManager';
 import ProjectileManager from './ProjectileManager';
 import Emitter from '../particle/Emitter';
 import PickUpManager from './PickUpManager';
+import TimeManager from '../helpers/TimeManager';
 
 import contain from '../helpers/contain';
 import hitTestRectangle from '../helpers/hitTestRectangle';
@@ -25,14 +26,16 @@ export default class World {
 
     this.score = 0;
     this.numberOfLives = INITIAL_NUMBER_OF_LIVES;
+    this.dragonHit = false;
     this.hasAlivePlayer = true;
     this.hasUnicorns = true;
     this.unicornsHaveReachedBottom = false;
+    this.timeManager = new TimeManager();
 
     this.createScene();
     this.createDragonProjectileManager();
     this.createUnicornProjectileManagers();
-    this.createUnicornEmitter();
+    this.createEmitters();
     this.createScoreDisplay();
     this.createLivesDisplay();
     this.createPickUpManager();
@@ -84,13 +87,20 @@ export default class World {
     });
   }
 
-  createUnicornEmitter() {
+  createEmitters() {
     this.unicornEmitter = new Emitter(
       this.textures['heart_white_small.png'],
       0.05,
       500
     );
     this.container.addChild(this.unicornEmitter.particleSystem.container);
+
+    this.dragonEmitter = new Emitter(
+      this.textures['heart_green_small.png'],
+      0.1,
+      1500
+    );
+    this.container.addChild(this.dragonEmitter.particleSystem.container);
   }
 
   createScoreDisplay() {
@@ -139,7 +149,9 @@ export default class World {
 
   reset() {
     this.hasAlivePlayer = true;
+    this.dragonHit = false;
 
+    this.dragon.visible = true;
     this.dragon.x = RENDERER_WIDTH / 2 - this.dragon.width / 2;
 
     this.dragonProjectileManager.clear();
@@ -208,12 +220,16 @@ export default class World {
     this.dragonProjectileManager.update(dt);
     this.unicornProjectileManagers.forEach((projectileManager) => projectileManager.update(dt));
     this.unicornEmitter.update(dt);
+    this.dragonEmitter.update(dt);
     this.pickUpManager.update(dt);
+    this.timeManager.update(dt);
 
-    this.containDragon();
-    this.checkUnicornFire();
-    this.checkCollisions();
-    this.checkIfUnicornsHaveReachedBottom();
+    if (!this.dragonHit) {
+      this.containDragon();
+      this.checkUnicornFire();
+      this.checkCollisions();
+      this.checkIfUnicornsHaveReachedBottom();
+    }
   }
 
   containDragon() {
@@ -305,12 +321,23 @@ export default class World {
     // unicorn hearts vs. dragon
     this.unicornProjectileManagers.forEach((projectileManager) => {
       const hitProjectile = projectileManager.projectiles.find(
-        (projectile) => hitTestRectangle(projectile, this.dragon, true)
+        (projectile) => !this.dragonHit && hitTestRectangle(projectile, this.dragon, true)
       );
 
       if (hitProjectile) {
-        this.loseLife();
-        this.hasAlivePlayer = false;
+        this.dragonHit = true;
+
+        this.dragon.visible = false;
+        this.dragonEmitter.burst(
+          24,
+          this.dragon.getGlobalPosition().x + this.dragon.width / 2,
+          RENDERER_HEIGHT
+        );
+
+        this.timeManager.setTimeout(() => {
+          this.loseLife();
+          this.hasAlivePlayer = false;
+        }, 1500);
       }
     });
 

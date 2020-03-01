@@ -227,6 +227,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">heart_green_small.png</key>
             <key type="filename">heart_white_small.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -282,6 +283,7 @@
             <filename>beer.png</filename>
             <filename>pizza.png</filename>
             <filename>heart_white_small.png</filename>
+            <filename>heart_green_small.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
