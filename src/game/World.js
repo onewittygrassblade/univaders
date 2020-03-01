@@ -11,6 +11,7 @@ import {
 import Movable from './Movable';
 import UnicornManager from './UnicornManager';
 import ProjectileManager from './ProjectileManager';
+import Emitter from '../particle/Emitter';
 import PickUpManager from './PickUpManager';
 
 import contain from '../helpers/contain';
@@ -31,6 +32,7 @@ export default class World {
     this.createScene();
     this.createDragonProjectileManager();
     this.createUnicornProjectileManagers();
+    this.createUnicornEmitter();
     this.createScoreDisplay();
     this.createLivesDisplay();
     this.createPickUpManager();
@@ -80,6 +82,15 @@ export default class World {
       this.unicornProjectileManagers.push(projectileManager);
       this.container.addChild(projectileManager.container);
     });
+  }
+
+  createUnicornEmitter() {
+    this.unicornEmitter = new Emitter(
+      this.textures['heart_white_small.png'],
+      0.05,
+      500
+    );
+    this.container.addChild(this.unicornEmitter.particleSystem.container);
   }
 
   createScoreDisplay() {
@@ -196,6 +207,7 @@ export default class World {
     this.unicornManager.update(dt);
     this.dragonProjectileManager.update(dt);
     this.unicornProjectileManagers.forEach((projectileManager) => projectileManager.update(dt));
+    this.unicornEmitter.update(dt);
     this.pickUpManager.update(dt);
 
     this.containDragon();
@@ -256,6 +268,11 @@ export default class World {
 
       if (hitUnicorn) {
         hitUnicorn.visible = false;
+        this.unicornEmitter.burst(
+          7,
+          hitUnicorn.getGlobalPosition().x + hitUnicorn.width / 2,
+          hitUnicorn.getGlobalPosition().y + hitUnicorn.height / 2
+        );
         const visibleUnicorns = this.unicorns.filter(
           (unicorn) => unicorn.visible
         );
