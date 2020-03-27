@@ -158,8 +158,6 @@ export default class World {
     this.unicornProjectileManagers.forEach((projectileManager) => {
       projectileManager.clear();
     });
-
-    this.pickUpManager.clear();
   }
 
   createPickUpActions() {
