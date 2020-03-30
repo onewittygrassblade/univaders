@@ -301,7 +301,9 @@ export default class World {
           hitUnicorn.getGlobalPosition().y + hitUnicorn.height / 2
         );
         if (!this.unicornManager.hasVisibleUnicorns()) {
-          this.hasUnicorns = false;
+          this.timeManager.setTimeout(() => {
+            this.hasUnicorns = false;
+          }, 1500);
         }
 
         const unicornProjectileManager = this.unicornProjectileManagers.filter(
