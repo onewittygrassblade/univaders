@@ -62,6 +62,7 @@ export default class App extends Application {
       stage: this.stage,
       gameStatus: '',
       score: 0,
+      level: 0,
     };
 
     // state stack

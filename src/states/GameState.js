@@ -1,6 +1,8 @@
 import State from './State';
 import World from '../game/World';
 
+import LEVELS_DATA from '../const/levels';
+
 export default class GameState extends State {
   constructor(stateStack, context) {
     super(stateStack, context);
@@ -8,6 +10,7 @@ export default class GameState extends State {
     this.world = new World(
       this.container,
       context.textures,
+      LEVELS_DATA[0].world
     );
   }
 
@@ -26,7 +29,7 @@ export default class GameState extends State {
     this.world.update(dt);
 
     if (!this.world.hasAlivePlayer && this.world.hasLives()) {
-      this.world.reset();
+      this.world.resetAfterCrash();
       return false;
     }
 
@@ -37,18 +40,22 @@ export default class GameState extends State {
     }
 
     if (!this.world.hasUnicorns) {
-      this.context.gameStatus = 'success';
-      this.gameOver();
-      return false;
+      this.context.level += 1;
+
+      if (this.context.level < LEVELS_DATA.length) {
+        this.world.levelData = LEVELS_DATA[this.context.level].world;
+        this.world.resetForNextLevel();
+      } else {
+        this.context.gameStatus = 'success';
+        this.gameOver();
+      }
     }
 
     return false;
   }
 
   gameOver() {
-    this.context.score = this.world.unicorns.filter(
-      (unicorn) => !unicorn.visible
-    ).length;
+    this.context.score = this.world.score;
     this.stateStack.popState();
     this.stateStack.pushState('GameOverState');
   }

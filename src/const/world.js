@@ -1,6 +1,6 @@
-export const UNICORNS = {
-  x: 10,
-  y: 5,
+export const NUM_UNICORNS = {
+  rows: 7,
+  cols: 10,
 };
 
 export const UNICORN_SPACING = {

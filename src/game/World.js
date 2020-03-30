@@ -1,12 +1,7 @@
 import { Container, Sprite, BitmapText } from '../const/aliases';
 
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
-import {
-  UNICORNS,
-  UNICORN_SPACING,
-  INITIAL_NUMBER_OF_LIVES,
-  MAX_NUMBER_OF_LIVES,
-} from '../const/world';
+import { INITIAL_NUMBER_OF_LIVES, MAX_NUMBER_OF_LIVES } from '../const/world';
 
 import Movable from './Movable';
 import UnicornManager from './UnicornManager';
@@ -20,9 +15,10 @@ import hitTestRectangle from '../helpers/hitTestRectangle';
 import { randomInt } from '../helpers/RandomNumbers';
 
 export default class World {
-  constructor(gameContainer, textures) {
+  constructor(gameContainer, textures, levelData) {
     this.container = gameContainer;
     this.textures = textures;
+    this.levelData = levelData;
 
     this.score = 0;
     this.numberOfLives = INITIAL_NUMBER_OF_LIVES;
@@ -46,10 +42,7 @@ export default class World {
     // unicorns
     this.unicornManager = new UnicornManager(
       this.textures['unicorn.png'],
-      UNICORNS.y,
-      UNICORNS.x,
-      UNICORN_SPACING.x,
-      UNICORN_SPACING.y
+      this.levelData.unicorns
     );
     this.container.addChild(this.unicornManager.container);
     this.unicorns = this.unicornManager.container.children;
@@ -74,7 +67,8 @@ export default class World {
 
   createUnicornProjectileManagers() {
     this.unicornProjectileManagers = [];
-    this.unicornManager.bottomRowUnicorns.forEach((unicorn) => {
+
+    this.unicornManager.getLowerUnicorns().forEach((unicorn) => {
       const projectileManager = new ProjectileManager(
         unicorn,
         this.textures['heart_blue.png'],
@@ -147,19 +141,6 @@ export default class World {
     this.container.addChild(this.pickUpManager.container);
   }
 
-  reset() {
-    this.hasAlivePlayer = true;
-    this.dragonHit = false;
-
-    this.dragon.visible = true;
-    this.dragon.x = RENDERER_WIDTH / 2 - this.dragon.width / 2;
-
-    this.dragonProjectileManager.clear();
-    this.unicornProjectileManagers.forEach((projectileManager) => {
-      projectileManager.clear();
-    });
-  }
-
   createPickUpActions() {
     this.pickUpActions = [
       this.gainLife.bind(this),
@@ -187,6 +168,36 @@ export default class World {
     this.unicornProjectileManagers.forEach((projectileManager) => {
       projectileManager.clear();
     });
+  }
+
+  resetAfterCrash() {
+    this.hasAlivePlayer = true;
+    this.dragonHit = false;
+
+    this.dragon.visible = true;
+    this.dragon.x = RENDERER_WIDTH / 2 - this.dragon.width / 2;
+
+    this.dragonProjectileManager.clear();
+    this.unicornProjectileManagers.forEach((projectileManager) => {
+      projectileManager.clear();
+    });
+  }
+
+  resetForNextLevel() {
+    this.dragon.x = RENDERER_WIDTH / 2 - this.dragon.width / 2;
+    this.unicornManager.setup(this.levelData.unicorns);
+    this.dragonProjectileManager.clear();
+
+    const lowerUnicorns = this.unicornManager.getLowerUnicorns();
+    let n = 0;
+    this.unicornProjectileManagers.forEach((projectileManager) => {
+      projectileManager.clear();
+      projectileManager.parent = lowerUnicorns[n];
+      n += 1;
+    });
+    this.pickUpManager.clear();
+
+    this.hasUnicorns = true;
   }
 
   handleEvent(e) {
@@ -287,10 +298,7 @@ export default class World {
           hitUnicorn.getGlobalPosition().x + hitUnicorn.width / 2,
           hitUnicorn.getGlobalPosition().y + hitUnicorn.height / 2
         );
-        const visibleUnicorns = this.unicorns.filter(
-          (unicorn) => unicorn.visible
-        );
-        if (visibleUnicorns.length === 0) {
+        if (!this.unicornManager.hasVisibleUnicorns()) {
           this.hasUnicorns = false;
         }
 
@@ -374,7 +382,7 @@ export default class World {
 
   loseLife() {
     if (this.numberOfLives === MAX_NUMBER_OF_LIVES) {
-      this.pickUpActions.unshift(this.gainLife);
+      this.pickUpActions.unshift(this.gainLife.bind(this));
     }
     this.numberOfLives -= 1;
     this.livesSpriteContainer.removeChildAt(this.livesSpriteContainer.children.length - 1);
