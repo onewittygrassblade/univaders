@@ -19,6 +19,7 @@ export default class ProjectileManager {
 
     this.isFiring = false;
     this.fireCountdown = 0;
+    this.baseFireInterval = fireInterval;
     this.fireInterval = fireInterval;
 
     this.projectileSpeed = projectileSpeed;
@@ -58,6 +59,10 @@ export default class ProjectileManager {
     }
 
     this.fireInterval -= 100;
+  }
+
+  resetFireRate() {
+    this.fireInterval = this.baseFireInterval;
   }
 
   update(dt) {

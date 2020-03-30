@@ -178,6 +178,8 @@ export default class World {
     this.dragon.x = RENDERER_WIDTH / 2 - this.dragon.width / 2;
 
     this.dragonProjectileManager.clear();
+    this.dragonProjectileManager.resetFireRate();
+
     this.unicornProjectileManagers.forEach((projectileManager) => {
       projectileManager.clear();
     });
