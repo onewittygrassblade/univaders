@@ -92,6 +92,13 @@ export default class World {
     );
     this.container.addChild(this.unicornEmitter.particleSystem.container);
 
+    this.unicornHeartEmitter = new Emitter(
+      this.textures['heart_blue_small.png'],
+      0.05,
+      500
+    );
+    this.container.addChild(this.unicornHeartEmitter.particleSystem.container);
+
     this.dragonEmitter = new Emitter(
       this.textures['heart_green_small.png'],
       0.1,
@@ -172,6 +179,14 @@ export default class World {
 
   clearUnicornProjectiles() {
     this.unicornProjectileManagers.forEach((projectileManager) => {
+      projectileManager.projectiles.forEach((projectile) => {
+        this.unicornHeartEmitter.burst(
+          7,
+          projectile.getGlobalPosition().x + projectile.width / 2,
+          projectile.getGlobalPosition().y + projectile.height / 2
+        );
+      });
+
       projectileManager.clear();
     });
     this.sounds.explosion.play();
@@ -242,6 +257,7 @@ export default class World {
     this.dragonProjectileManager.update(dt);
     this.unicornProjectileManagers.forEach((projectileManager) => projectileManager.update(dt));
     this.unicornEmitter.update(dt);
+    this.unicornHeartEmitter.update(dt);
     this.dragonEmitter.update(dt);
     this.pickUpManager.update(dt);
     this.timeManager.update(dt);

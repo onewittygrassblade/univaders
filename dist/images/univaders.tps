@@ -117,7 +117,7 @@
             <key>basic</key>
             <struct type="AlgorithmBasicSettings">
                 <key>sortBy</key>
-                <enum type="AlgorithmBasicSettings::SortBy">Best</enum>
+                <enum type="AlgorithmBasicSettings::SortBy">Name</enum>
                 <key>order</key>
                 <enum type="AlgorithmBasicSettings::Order">Ascending</enum>
             </struct>
@@ -155,7 +155,7 @@
         <key>prependSmartFolderName</key>
         <false/>
         <key>autodetectAnimations</key>
-        <true/>
+        <false/>
         <key>globalSpriteSettings</key>
         <struct type="SpriteSettings">
             <key>scale</key>
@@ -227,6 +227,7 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">heart_blue_small.png</key>
             <key type="filename">heart_green_small.png</key>
             <key type="filename">heart_white_small.png</key>
             <struct type="IndividualSpriteSettings">
@@ -284,6 +285,7 @@
             <filename>pizza.png</filename>
             <filename>heart_white_small.png</filename>
             <filename>heart_green_small.png</filename>
+            <filename>heart_blue_small.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
