@@ -24,6 +24,7 @@ export default class World {
     this.score = 0;
     this.numberOfLives = INITIAL_NUMBER_OF_LIVES;
     this.dragonHit = false;
+    this.hasClearedLevel = false;
     this.hasAlivePlayer = true;
     this.hasUnicorns = true;
     this.unicornsHaveReachedBottom = false;
@@ -105,6 +106,13 @@ export default class World {
       1500
     );
     this.container.addChild(this.dragonEmitter.particleSystem.container);
+
+    this.dragonHeartEmitter = new Emitter(
+      this.textures['heart_red_small.png'],
+      0.05,
+      500
+    );
+    this.container.addChild(this.dragonHeartEmitter.particleSystem.container);
   }
 
   createScoreDisplay() {
@@ -192,6 +200,18 @@ export default class World {
     this.sounds.explosion.play();
   }
 
+  clearDragonProjectiles() {
+    this.dragonProjectileManager.projectiles.forEach((projectile) => {
+      this.dragonHeartEmitter.burst(
+        7,
+        projectile.getGlobalPosition().x + projectile.width / 2,
+        projectile.getGlobalPosition().y + projectile.height / 2
+      );
+    });
+
+    this.dragonProjectileManager.clear();
+  }
+
   resetAfterCrash() {
     this.hasAlivePlayer = true;
     this.dragonHit = false;
@@ -222,6 +242,7 @@ export default class World {
     this.pickUpManager.clear();
 
     this.hasUnicorns = true;
+    this.hasClearedLevel = false;
   }
 
   handleEvent(e) {
@@ -238,7 +259,9 @@ export default class World {
           this.dragon.move('right');
           break;
         case 32:
-          this.dragonProjectileManager.fire();
+          if (!this.hasClearedLevel) {
+            this.dragonProjectileManager.fire();
+          }
           break;
         default:
       }
@@ -258,6 +281,7 @@ export default class World {
     this.unicornProjectileManagers.forEach((projectileManager) => projectileManager.update(dt));
     this.unicornEmitter.update(dt);
     this.unicornHeartEmitter.update(dt);
+    this.dragonHeartEmitter.update(dt);
     this.dragonEmitter.update(dt);
     this.pickUpManager.update(dt);
     this.timeManager.update(dt);
@@ -329,6 +353,10 @@ export default class World {
           hitUnicorn.getGlobalPosition().y + hitUnicorn.height / 2
         );
         if (!this.unicornManager.hasVisibleUnicorns()) {
+          this.hasClearedLevel = true;
+          this.dragonProjectileManager.stopFiring();
+          this.clearUnicornProjectiles();
+          this.clearDragonProjectiles();
           this.sounds.levelcomplete.play();
           this.timeManager.setTimeout(() => {
             this.hasUnicorns = false;

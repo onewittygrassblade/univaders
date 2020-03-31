@@ -229,6 +229,7 @@
             </struct>
             <key type="filename">heart_blue_small.png</key>
             <key type="filename">heart_green_small.png</key>
+            <key type="filename">heart_red_small.png</key>
             <key type="filename">heart_white_small.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -286,6 +287,7 @@
             <filename>heart_white_small.png</filename>
             <filename>heart_green_small.png</filename>
             <filename>heart_blue_small.png</filename>
+            <filename>heart_red_small.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -48,9 +48,17 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":31,"h":21},
 	"sourceSize": {"w":31,"h":21}
 },
+"heart_red_small.png":
+{
+	"frame": {"x":92,"y":54,"w":15,"h":10},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":15,"h":10},
+	"sourceSize": {"w":15,"h":10}
+},
 "heart_white_small.png":
 {
-	"frame": {"x":92,"y":54,"w":15,"h":11},
+	"frame": {"x":0,"y":75,"w":15,"h":11},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":15,"h":11},
@@ -58,7 +66,7 @@
 },
 "pizza.png":
 {
-	"frame": {"x":0,"y":75,"w":52,"h":52},
+	"frame": {"x":15,"y":75,"w":52,"h":52},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":52,"h":52},
@@ -66,7 +74,7 @@
 },
 "unicorn.png":
 {
-	"frame": {"x":52,"y":75,"w":45,"h":44},
+	"frame": {"x":67,"y":75,"w":45,"h":44},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":45,"h":44},
@@ -79,6 +87,6 @@
 	"format": "RGBA8888",
 	"size": {"w":120,"h":127},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:8697523cf0e136321df31e432b8e59d1:1e9cffab197ad4d97c51b22f8ea4bd10:8b4c962a350d7332e534a7d31d049eca$"
+	"smartupdate": "$TexturePacker:SmartUpdate:0438d3fdbc0bf37e2281d32488a22eee:ba2a16686a165b595a9833bb6acd014c:8b4c962a350d7332e534a7d31d049eca$"
 }
 }
