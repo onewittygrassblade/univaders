@@ -15,9 +15,10 @@ import hitTestRectangle from '../helpers/hitTestRectangle';
 import { randomInt } from '../helpers/RandomNumbers';
 
 export default class World {
-  constructor(gameContainer, textures, levelData) {
+  constructor(gameContainer, textures, sounds, levelData) {
     this.container = gameContainer;
     this.textures = textures;
+    this.sounds = sounds;
     this.levelData = levelData;
 
     this.score = 0;
@@ -58,6 +59,7 @@ export default class World {
     this.dragonProjectileManager = new ProjectileManager(
       this.dragon,
       this.textures['heart_red.png'],
+      this.sounds.soft,
       'top',
       600,
       0.4
@@ -72,6 +74,7 @@ export default class World {
       const projectileManager = new ProjectileManager(
         unicorn,
         this.textures['heart_blue.png'],
+        null,
         'bottom',
         1500,
         0.15
@@ -158,16 +161,20 @@ export default class World {
     if (this.numberOfLives === MAX_NUMBER_OF_LIVES) {
       this.pickUpActions.shift();
     }
+
+    this.sounds.extralife.play();
   }
 
   speedUpFire() {
     this.dragonProjectileManager.increaseFireRate();
+    this.sounds.powerup.play();
   }
 
   clearUnicornProjectiles() {
     this.unicornProjectileManagers.forEach((projectileManager) => {
       projectileManager.clear();
     });
+    this.sounds.explosion.play();
   }
 
   resetAfterCrash() {
@@ -295,12 +302,14 @@ export default class World {
 
       if (hitUnicorn) {
         hitUnicorn.visible = false;
+        this.sounds.pop.play();
         this.unicornEmitter.burst(
           7,
           hitUnicorn.getGlobalPosition().x + hitUnicorn.width / 2,
           hitUnicorn.getGlobalPosition().y + hitUnicorn.height / 2
         );
         if (!this.unicornManager.hasVisibleUnicorns()) {
+          this.sounds.levelcomplete.play();
           this.timeManager.setTimeout(() => {
             this.hasUnicorns = false;
           }, 1500);
@@ -343,6 +352,7 @@ export default class World {
           this.dragon.getGlobalPosition().x + this.dragon.width / 2,
           RENDERER_HEIGHT
         );
+        this.sounds.die.play();
 
         this.timeManager.setTimeout(() => {
           this.loseLife();

@@ -10,12 +10,17 @@ import centerCanvas from './helpers/centerCanvas';
 import {
   RENDERER_WIDTH,
   RENDERER_HEIGHT,
+  SOUNDS,
   STATES,
 } from './const/app';
 
 export default class App extends Application {
   static loadAssets() {
     return new Promise((resolve, reject) => {
+      SOUNDS.forEach((soundName) => {
+        loader.add(soundName, `sounds/${soundName}.mp3`);
+      });
+
       loader
         .add('images/univaders.json')
         .add('fonts/arcade-white.fnt')
@@ -57,8 +62,14 @@ export default class App extends Application {
     // context
     const { textures } = resources['images/univaders.json'];
 
+    const sounds = SOUNDS.reduce((acc, item) => {
+      acc[item] = resources[item].sound;
+      return acc;
+    }, {});
+
     const context = {
       textures,
+      sounds,
       stage: this.stage,
       gameStatus: '',
       score: 0,

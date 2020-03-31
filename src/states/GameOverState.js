@@ -12,6 +12,12 @@ export default class GameOverState extends State {
     this.createScoreText();
     this.createHint();
 
+    if (this.context.gameStatus === 'success') {
+      context.sounds.tada.play();
+    } else {
+      context.sounds.fail.play();
+    }
+
     this.container.x = RENDERER_WIDTH / 2;
     this.container.y = RENDERER_HEIGHT / 2 - this.container.height / 2;
   }

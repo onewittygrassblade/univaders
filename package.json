@@ -18,6 +18,7 @@
   "author": "OneWittyGrassBlade",
   "license": "MIT",
   "dependencies": {
+    "pixi-sound": "^3.0.4",
     "pixi.js": "^5.2.1"
   },
   "devDependencies": {
