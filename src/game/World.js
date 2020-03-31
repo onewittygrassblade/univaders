@@ -211,6 +211,10 @@ export default class World {
 
   handleEvent(e) {
     if (e.type === 'keydown') {
+      if (!this.dragon.visible) {
+        return;
+      }
+
       switch (e.keyCode) {
         case 37:
           this.dragon.move('left');
@@ -352,6 +356,8 @@ export default class World {
           this.dragon.getGlobalPosition().x + this.dragon.width / 2,
           RENDERER_HEIGHT
         );
+        this.dragonProjectileManager.clear();
+        this.dragonProjectileManager.stopFiring();
         this.sounds.die.play();
 
         this.timeManager.setTimeout(() => {
