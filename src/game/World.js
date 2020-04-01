@@ -113,6 +113,13 @@ export default class World {
       500
     );
     this.container.addChild(this.dragonHeartEmitter.particleSystem.container);
+
+    this.pickUpEmitter = new Emitter(
+      this.textures['heart_orange_small.png'],
+      0.05,
+      500
+    );
+    this.container.addChild(this.pickUpEmitter.particleSystem.container);
   }
 
   createScoreDisplay() {
@@ -282,6 +289,7 @@ export default class World {
     this.unicornEmitter.update(dt);
     this.unicornHeartEmitter.update(dt);
     this.dragonHeartEmitter.update(dt);
+    this.pickUpEmitter.update(dt);
     this.dragonEmitter.update(dt);
     this.pickUpManager.update(dt);
     this.timeManager.update(dt);
@@ -421,6 +429,11 @@ export default class World {
         this.pickUpActions[randomInt(0, this.pickUpActions.length - 1)]();
         projectile.shouldBeRemoved = true;
         hitPickUp.shouldBeRemoved = true;
+        this.pickUpEmitter.burst(
+          7,
+          hitPickUp.getGlobalPosition().x + hitPickUp.width / 2,
+          hitPickUp.getGlobalPosition().y + hitPickUp.height / 2
+        );
       }
     });
 

@@ -117,7 +117,7 @@
             <key>basic</key>
             <struct type="AlgorithmBasicSettings">
                 <key>sortBy</key>
-                <enum type="AlgorithmBasicSettings::SortBy">Name</enum>
+                <enum type="AlgorithmBasicSettings::SortBy">Best</enum>
                 <key>order</key>
                 <enum type="AlgorithmBasicSettings::Order">Ascending</enum>
             </struct>
@@ -229,6 +229,7 @@
             </struct>
             <key type="filename">heart_blue_small.png</key>
             <key type="filename">heart_green_small.png</key>
+            <key type="filename">heart_orange_small.png</key>
             <key type="filename">heart_red_small.png</key>
             <key type="filename">heart_white_small.png</key>
             <struct type="IndividualSpriteSettings">
@@ -288,6 +289,7 @@
             <filename>heart_green_small.png</filename>
             <filename>heart_blue_small.png</filename>
             <filename>heart_red_small.png</filename>
+            <filename>heart_orange_small.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

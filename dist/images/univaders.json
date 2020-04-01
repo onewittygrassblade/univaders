@@ -40,9 +40,17 @@
 	"spriteSourceSize": {"x":0,"y":0,"w":15,"h":11},
 	"sourceSize": {"w":15,"h":11}
 },
+"heart_orange_small.png":
+{
+	"frame": {"x":61,"y":54,"w":15,"h":10},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":15,"h":10},
+	"sourceSize": {"w":15,"h":10}
+},
 "heart_red.png":
 {
-	"frame": {"x":61,"y":54,"w":31,"h":21},
+	"frame": {"x":76,"y":54,"w":31,"h":21},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":31,"h":21},
@@ -50,7 +58,7 @@
 },
 "heart_red_small.png":
 {
-	"frame": {"x":92,"y":54,"w":15,"h":10},
+	"frame": {"x":107,"y":54,"w":15,"h":10},
 	"rotated": false,
 	"trimmed": false,
 	"spriteSourceSize": {"x":0,"y":0,"w":15,"h":10},
@@ -85,8 +93,8 @@
 	"version": "1.0",
 	"image": "univaders.png",
 	"format": "RGBA8888",
-	"size": {"w":120,"h":127},
+	"size": {"w":122,"h":127},
 	"scale": "1",
-	"smartupdate": "$TexturePacker:SmartUpdate:0438d3fdbc0bf37e2281d32488a22eee:ba2a16686a165b595a9833bb6acd014c:8b4c962a350d7332e534a7d31d049eca$"
+	"smartupdate": "$TexturePacker:SmartUpdate:72fabef1c321395bd1fc63c1039a3870:51adbc067c1610ecc9dff8bfa39ebcd3:8b4c962a350d7332e534a7d31d049eca$"
 }
 }
