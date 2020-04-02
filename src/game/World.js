@@ -4,7 +4,8 @@ import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 import { INITIAL_NUMBER_OF_LIVES, MAX_NUMBER_OF_LIVES } from '../const/world';
 
 import Movable from './Movable';
-import UnicornManager from './UnicornManager';
+import UnicornGridManager from './UnicornGridManager';
+import UnicornFluidManager from './UnicornFluidManager';
 import ProjectileManager from './ProjectileManager';
 import Emitter from '../particle/Emitter';
 import PickUpManager from './PickUpManager';
@@ -42,9 +43,9 @@ export default class World {
 
   createScene() {
     // unicorns
-    this.unicornManager = new UnicornManager(
+    this.unicornManager = new UnicornGridManager(
       this.textures['unicorn.png'],
-      this.levelData.unicorns
+      this.levelData.unicorns.grid
     );
     this.container.addChild(this.unicornManager.container);
     this.unicorns = this.unicornManager.container.children;
@@ -236,16 +237,43 @@ export default class World {
 
   resetForNextLevel() {
     this.dragon.x = RENDERER_WIDTH / 2 - this.dragon.width / 2;
-    this.unicornManager.setup(this.levelData.unicorns);
     this.dragonProjectileManager.clear();
 
-    const lowerUnicorns = this.unicornManager.getLowerUnicorns();
-    let n = 0;
-    this.unicornProjectileManagers.forEach((projectileManager) => {
-      projectileManager.clear();
-      projectileManager.parent = lowerUnicorns[n];
-      n += 1;
-    });
+    if (this.levelData.unicorns.type === 'grid') {
+      this.unicornManager.setup(this.levelData.unicorns.grid);
+
+      const lowerUnicorns = this.unicornManager.getLowerUnicorns();
+      let n = 0;
+      this.unicornProjectileManagers.forEach((projectileManager) => {
+        projectileManager.clear();
+        projectileManager.parent = lowerUnicorns[n];
+        n += 1;
+      });
+    } else {
+      this.container.removeChild(this.unicornManager.container);
+      this.unicornManager = null;
+      this.unicornManager = new UnicornFluidManager(this.textures['unicorn.png']);
+      this.container.addChild(this.unicornManager.container);
+      this.unicorns = this.unicornManager.container.children;
+
+      this.unicornProjectileManagers.forEach((projectileManager) => {
+        this.container.removeChild(projectileManager.container);
+      });
+      this.unicornProjectileManagers = [];
+      this.unicornManager.getUnicorns().forEach((unicorn) => {
+        const projectileManager = new ProjectileManager(
+          unicorn,
+          this.textures['heart_blue.png'],
+          null,
+          'bottom',
+          1500,
+          0.15
+        );
+        this.unicornProjectileManagers.push(projectileManager);
+        this.container.addChild(projectileManager.container);
+      });
+    }
+
     this.pickUpManager.clear();
 
     this.hasUnicorns = true;
@@ -378,18 +406,22 @@ export default class World {
         if (unicornProjectileManager) {
           unicornProjectileManager.stopFiring();
 
-          const unicornAbove = this.unicornManager.getUnicornAbove(hitUnicorn);
-          if (unicornAbove) {
-            unicornProjectileManager.parent = unicornAbove;
+          if (this.levelData.unicorns.type === 'grid') {
+            const unicornAbove = this.unicornManager.getUnicornAbove(hitUnicorn);
+            if (unicornAbove) {
+              unicornProjectileManager.parent = unicornAbove;
+            }
           }
         }
 
         projectile.shouldBeRemoved = true;
 
+        if (this.levelData.unicorns.type === 'grid') {
+          this.unicornManager.increaseMoveRate();
+        }
+
         this.score += 1;
         this.scoreText.text = `${this.score} MONTHS`;
-
-        this.unicornManager.increaseMoveRate();
       }
     });
 

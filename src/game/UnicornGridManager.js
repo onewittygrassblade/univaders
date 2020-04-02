@@ -3,7 +3,7 @@ import { Container, Sprite } from '../const/aliases';
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 import { NUM_UNICORNS, UNICORN_SPACING } from '../const/world';
 
-export default class UnicornManager {
+export default class UnicornGridManager {
   constructor(texture, grid) {
     this.texture = texture;
 
