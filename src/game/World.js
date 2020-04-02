@@ -127,7 +127,11 @@ export default class World {
   createScoreDisplay() {
     const scoreContainer = new Container();
 
-    this.scoreText = new BitmapText(`${this.score} MONTHS`, { font: '72px arcade-white' });
+    const scoreLabelText = new BitmapText('MONTHS', { font: '64px arcade-white' });
+    scoreContainer.addChild(scoreLabelText);
+
+    this.scoreText = new BitmapText(`${this.score}`, { font: '64px arcade-green' });
+    this.scoreText.x = scoreLabelText.width + 20;
     scoreContainer.addChild(this.scoreText);
 
     scoreContainer.x = 20;
@@ -138,7 +142,7 @@ export default class World {
   createLivesDisplay() {
     const livesContainer = new Container();
 
-    const livesText = new BitmapText('LIVES', { font: '72px arcade-white' });
+    const livesText = new BitmapText('LIVES', { font: '64px arcade-white' });
     livesContainer.addChild(livesText);
 
     let lifeWidth;
@@ -424,7 +428,7 @@ export default class World {
         }
 
         this.score += 1;
-        this.scoreText.text = `${this.score} MONTHS`;
+        this.scoreText.text = `${this.score}`;
       }
     });
 

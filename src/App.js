@@ -24,6 +24,7 @@ export default class App extends Application {
       loader
         .add('images/univaders.json')
         .add('fonts/arcade-white.fnt')
+        .add('fonts/arcade-green.fnt')
         .on('error', reject)
         .load(resolve);
     });
