@@ -83,6 +83,7 @@ export default class World {
       );
       this.unicornProjectileManagers.push(projectileManager);
       this.container.addChild(projectileManager.container);
+      projectileManager.delay(1000);
     });
   }
 
@@ -248,6 +249,7 @@ export default class World {
         projectileManager.clear();
         projectileManager.parent = lowerUnicorns[n];
         n += 1;
+        projectileManager.delay(1000);
       });
     } else {
       this.container.removeChild(this.unicornManager.container);
@@ -271,6 +273,7 @@ export default class World {
         );
         this.unicornProjectileManagers.push(projectileManager);
         this.container.addChild(projectileManager.container);
+        projectileManager.delay(1000);
       });
     }
 

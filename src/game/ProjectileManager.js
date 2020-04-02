@@ -70,6 +70,10 @@ export default class ProjectileManager {
     this.fireInterval = this.baseFireInterval;
   }
 
+  delay(t) {
+    this.fireCountdown = t;
+  }
+
   update(dt) {
     // Remove projectiles out of view
     while (this.projectiles.length > 0 && isOutsideView(this.projectiles[0])) {
