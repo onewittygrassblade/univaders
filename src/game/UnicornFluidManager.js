@@ -9,7 +9,7 @@ const NUM_UNICORNS_COLS = 9;
 const NUM_UNICORNS_ROWS = 4;
 const UNICORN_SPACING_X = 100;
 const UNICORN_SPACING_Y = 100;
-const UNICORN_V_MIN = -0.1;
+const UNICORN_V_MIN = 0.03;
 const UNICORN_V_MAX = 0.1;
 
 export default class {
@@ -28,8 +28,8 @@ export default class {
         const unicorn = new Movable(this.texture);
         unicorn.x = j * UNICORN_SPACING_X;
         unicorn.y = i * UNICORN_SPACING_Y;
-        unicorn.vx = randomFloat(UNICORN_V_MIN, UNICORN_V_MAX);
-        unicorn.vy = randomFloat(UNICORN_V_MIN, UNICORN_V_MAX);
+        unicorn.vx = randomFloat(UNICORN_V_MIN, UNICORN_V_MAX) * (this.flipCoin() ? 1 : -1);
+        unicorn.vy = randomFloat(UNICORN_V_MIN, UNICORN_V_MAX) * (this.flipCoin() ? 1 : -1);
         this.container.addChild(unicorn);
         this.unicorns.push(unicorn);
       }
@@ -50,6 +50,16 @@ export default class {
     return visibleUnicorns.length > 0;
   }
 
+  /* eslint-disable class-methods-use-this */
+  flipCoin() {
+    return randomFloat(0, 1) <= 0.5;
+  }
+
+  hasReachedBottom() {
+    return false;
+  }
+  /* eslint-enable class-methods-use-this */
+
   update(dt) {
     this.unicorns.forEach((unicorn) => {
       unicorn.update(dt);
@@ -65,10 +75,4 @@ export default class {
       }
     });
   }
-
-  /* eslint-disable class-methods-use-this */
-  hasReachedBottom() {
-    return false;
-  }
-  /* eslint-enable class-methods-use-this */
 }
