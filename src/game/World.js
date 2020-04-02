@@ -435,18 +435,7 @@ export default class World {
       );
 
       if (hitProjectile) {
-        this.dragonHit = true;
-
-        this.dragon.visible = false;
-        this.dragonEmitter.burst(
-          24,
-          this.dragon.getGlobalPosition().x + this.dragon.width / 2,
-          RENDERER_HEIGHT
-        );
-        this.dragonProjectileManager.clear();
-        this.dragonProjectileManager.stopFiring();
-        this.sounds.die.play();
-
+        this.explodeDragon();
         this.timeManager.setTimeout(() => {
           this.loseLife();
           this.hasAlivePlayer = false;
@@ -478,18 +467,32 @@ export default class World {
     );
 
     if (hitUnicorn) {
-      this.unicornsHaveReachedBottom = true;
+      this.loseGame();
     }
   }
 
   checkIfUnicornsHaveReachedBottom() {
     if (this.unicornManager.hasReachedBottom()) {
-      this.unicornsHaveReachedBottom = true;
+      this.loseGame();
     }
   }
 
   hasLives() {
     return this.numberOfLives > 0;
+  }
+
+  explodeDragon() {
+    this.dragonHit = true;
+
+    this.dragon.visible = false;
+    this.dragonEmitter.burst(
+      24,
+      this.dragon.getGlobalPosition().x + this.dragon.width / 2,
+      RENDERER_HEIGHT
+    );
+    this.dragonProjectileManager.clear();
+    this.dragonProjectileManager.stopFiring();
+    this.sounds.die.play();
   }
 
   loseLife() {
@@ -498,5 +501,12 @@ export default class World {
     }
     this.numberOfLives -= 1;
     this.livesSpriteContainer.removeChildAt(this.livesSpriteContainer.children.length - 1);
+  }
+
+  loseGame() {
+    this.explodeDragon();
+    this.timeManager.setTimeout(() => {
+      this.unicornsHaveReachedBottom = true;
+    }, 1500);
   }
 }
