@@ -14,8 +14,9 @@ export const SOUNDS = [
 ];
 
 export const STATES = [
-  'TitleState',
-  'GameState',
-  'PauseState',
   'GameOverState',
+  'GameState',
+  'HintState',
+  'PauseState',
+  'TitleState',
 ];

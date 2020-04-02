@@ -1,5 +1,6 @@
 export default [
   {
+    hint: 'They are coming!',
     world: {
       unicorns: {
         type: 'grid',
@@ -16,6 +17,7 @@ export default [
     },
   },
   {
+    hint: 'The who',
     world: {
       unicorns: {
         type: 'grid',
@@ -32,6 +34,7 @@ export default [
     },
   },
   {
+    hint: 'The what',
     world: {
       unicorns: {
         type: 'grid',
@@ -48,6 +51,7 @@ export default [
     },
   },
   {
+    hint: 'The whom',
     world: {
       unicorns: {
         type: 'grid',
@@ -64,6 +68,7 @@ export default [
     },
   },
   {
+    hint: 'Uh oh...',
     world: {
       unicorns: {
         type: 'fluid',

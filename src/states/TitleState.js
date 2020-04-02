@@ -30,6 +30,7 @@ export default class TitleState extends State {
     if (e.type === 'keyup' && e.keyCode === 32) {
       this.stateStack.popState();
       this.stateStack.pushState('GameState');
+      this.stateStack.pushState('HintState');
     }
 
     return false;

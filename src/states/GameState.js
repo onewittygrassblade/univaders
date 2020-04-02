@@ -31,6 +31,7 @@ export default class GameState extends State {
 
     if (!this.world.hasAlivePlayer && this.world.hasLives()) {
       this.world.resetAfterCrash();
+      this.stateStack.pushState('HintState');
       return false;
     }
 
@@ -46,6 +47,7 @@ export default class GameState extends State {
       if (this.context.level < LEVELS_DATA.length) {
         this.world.levelData = LEVELS_DATA[this.context.level].world;
         this.world.resetForNextLevel();
+        this.stateStack.pushState('HintState');
       } else {
         this.context.gameStatus = 'success';
         this.gameOver();

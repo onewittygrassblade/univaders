@@ -1,13 +1,15 @@
-import TitleState from './states/TitleState';
-import GameState from './states/GameState';
-import PauseState from './states/PauseState';
 import GameOverState from './states/GameOverState';
+import GameState from './states/GameState';
+import HintState from './states/HintState';
+import PauseState from './states/PauseState';
+import TitleState from './states/TitleState';
 
 const stateClasses = {
-  TitleState,
-  GameState,
-  PauseState,
   GameOverState,
+  GameState,
+  HintState,
+  PauseState,
+  TitleState,
 };
 
 export default class StateStack {
