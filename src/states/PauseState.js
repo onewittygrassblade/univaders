@@ -1,45 +1,59 @@
-import { BitmapText, Graphics } from '../const/aliases';
-
 import State from './State';
+import Rectangle from '../gui/Rectangle';
+import Menu from '../gui/Menu';
 
-import { RENDERER_WIDTH } from '../const/app';
+import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 
 export default class PauseState extends State {
   constructor(stateStack, context) {
     super(stateStack, context);
-    this.createRectangle();
-    this.createTexts();
+    this.build();
   }
 
-  createRectangle() {
-    const rectangle = new Graphics();
-    rectangle.beginFill(0x000000);
-    rectangle.lineStyle(4, 0xFFFFFF, 1);
-    rectangle.drawRect(0, 0, 1100, 400);
-    rectangle.endFill();
-    rectangle.x = RENDERER_WIDTH / 2 - rectangle.width / 2;
-    rectangle.y = 120;
+  build() {
+    const toggleMusicMuted = () => {
+      this.context.musicPlayer.toggleMuted();
+      this.menu.updateMenuItemLabel(1, `Music ${this.context.musicPlayer.muted ? 'off' : 'on'}`);
+      this.menu.updateSelectionMarkers();
+    };
+    const popState = () => this.stateStack.popState();
+
+    const menuItems = [
+      {
+        text: 'Resume',
+        callback: popState,
+      },
+      {
+        text: `Music ${this.context.musicPlayer.muted ? 'off' : 'on'}`,
+        callback: toggleMusicMuted,
+      },
+    ];
+
+    this.menu = new Menu(menuItems);
+
+    const rectangle = new Rectangle(
+      this.menu.container.width + 320,
+      this.menu.container.height + 120
+    );
     this.container.addChild(rectangle);
-  }
+    this.container.addChild(this.menu.container);
 
-  createTexts() {
-    const messageText = new BitmapText('Game paused', { font: '180px arcade-white' });
-    messageText.x = RENDERER_WIDTH / 2 - messageText.width / 2;
-    messageText.y = 200;
-    this.container.addChild(messageText);
+    this.menu.container.x = this.container.width / 2 - this.menu.container.width / 2 - 20;
+    this.menu.container.y = this.container.height / 2 - this.menu.container.height / 2;
 
-    const hintText = new BitmapText('Press ESC to resume', { font: '72px arcade-white' });
-    hintText.x = RENDERER_WIDTH / 2 - hintText.width / 2;
-    hintText.y = 400;
-    this.container.addChild(hintText);
+    this.container.x = RENDERER_WIDTH / 2 - this.container.width / 2;
+    this.container.y = RENDERER_HEIGHT / 2 - this.container.height / 2;
   }
 
   handleEvent(e) {
     super.handleEvent(e);
+
     if (e.type === 'keyup' && e.keyCode === 27) {
       this.stateStack.popState();
+      return false;
     }
 
+    this.menu.handleEvent(e);
     return false;
   }
 }

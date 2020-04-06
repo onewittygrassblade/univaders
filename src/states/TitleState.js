@@ -8,7 +8,8 @@ export default class TitleState extends State {
   constructor(stateStack, context) {
     super(stateStack, context);
     this.createTitle();
-    this.createHint();
+    this.createMenu();
+    this.context.musicPlayer.play('StringedDisco');
   }
 
   createTitle() {
@@ -18,19 +19,87 @@ export default class TitleState extends State {
     this.container.addChild(title);
   }
 
-  createHint() {
-    const hint = new BitmapText('press space to start', { font: '72px arcade-white' });
-    hint.x = RENDERER_WIDTH / 2 - hint.width / 2;
-    hint.y = 400;
-    this.container.addChild(hint);
+  createMenu() {
+    this.menuItems = [];
+    this.selectedMenuItem = 0;
+
+    const menuItems = [
+      {
+        text: 'Start',
+        callback: () => this.startGame(),
+      },
+      {
+        text: 'Settings',
+        callback: () => this.showSettings(),
+      },
+    ];
+
+    let yPos = 380;
+
+    this.leftSelectionMarker = new BitmapText('.', { font: '72px arcade-white' });
+    this.rightSelectionMarker = new BitmapText('.', { font: '72px arcade-white' });
+    this.container.addChild(this.leftSelectionMarker);
+    this.container.addChild(this.rightSelectionMarker);
+
+    menuItems.forEach((item) => {
+      const text = new BitmapText(item.text, { font: '72px arcade-white' });
+      text.x = RENDERER_WIDTH / 2 - text.width / 2;
+      text.y = yPos;
+      yPos += 100;
+      this.container.addChild(text);
+      text.callback = item.callback;
+      this.menuItems.push(text);
+    });
+
+    this.updateSelectionMarkers();
+  }
+
+  selectNext() {
+    this.selectedMenuItem = (this.selectedMenuItem + 1) % this.menuItems.length;
+    this.updateSelectionMarkers();
+  }
+
+  selectPrevious() {
+    this.selectedMenuItem = (this.selectedMenuItem + this.menuItems.length - 1)
+     % this.menuItems.length;
+    this.updateSelectionMarkers();
+  }
+
+  updateSelectionMarkers() {
+    this.leftSelectionMarker.x = this.menuItems[this.selectedMenuItem].x
+      - this.leftSelectionMarker.width - 30;
+    this.leftSelectionMarker.y = this.menuItems[this.selectedMenuItem].y - 14;
+    this.rightSelectionMarker.x = this.menuItems[this.selectedMenuItem].x
+     + this.menuItems[this.selectedMenuItem].width + 8;
+    this.rightSelectionMarker.y = this.menuItems[this.selectedMenuItem].y - 14;
+  }
+
+  startGame() {
+    this.stateStack.popState();
+    this.stateStack.pushState('GameState');
+    this.stateStack.pushState('HintState');
+  }
+
+  showSettings() {
+    this.stateStack.pushState('SettingsState');
   }
 
   handleEvent(e) {
     super.handleEvent(e);
-    if (e.type === 'keyup' && e.keyCode === 32) {
-      this.stateStack.popState();
-      this.stateStack.pushState('GameState');
-      this.stateStack.pushState('HintState');
+    if (e.type === 'keyup') {
+      switch (e.keyCode) {
+        case 32:
+          this.menuItems[this.selectedMenuItem].callback();
+          break;
+        case 38:
+          this.selectPrevious();
+          break;
+        case 40:
+          this.selectNext();
+          break;
+        default:
+          break;
+      }
     }
 
     return false;

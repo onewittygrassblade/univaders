@@ -4,6 +4,7 @@ import {
   Application,
 } from './const/aliases';
 
+import MusicPlayer from './MusicPlayer';
 import StateStack from './StateStack';
 import centerCanvas from './helpers/centerCanvas';
 
@@ -11,6 +12,7 @@ import {
   RENDERER_WIDTH,
   RENDERER_HEIGHT,
   SOUNDS,
+  MUSICS,
   STATES,
 } from './const/app';
 
@@ -19,6 +21,10 @@ export default class App extends Application {
     return new Promise((resolve, reject) => {
       SOUNDS.forEach((soundName) => {
         loader.add(soundName, `sounds/${soundName}.mp3`);
+      });
+
+      MUSICS.forEach((musicName) => {
+        loader.add(musicName, `music/${musicName}.mp3`);
       });
 
       loader
@@ -68,9 +74,15 @@ export default class App extends Application {
       return acc;
     }, {});
 
+    const musics = MUSICS.reduce((acc, item) => {
+      acc[item] = resources[item].sound;
+      return acc;
+    }, {});
+
     const context = {
       textures,
       sounds,
+      musicPlayer: new MusicPlayer(musics),
       stage: this.stage,
       gameStatus: '',
       score: 0,

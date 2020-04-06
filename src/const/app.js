@@ -13,10 +13,15 @@ export const SOUNDS = [
   'tada',
 ];
 
+export const MUSICS = [
+  'StringedDisco',
+];
+
 export const STATES = [
   'GameOverState',
   'GameState',
   'HintState',
   'PauseState',
+  'SettingsState',
   'TitleState',
 ];
