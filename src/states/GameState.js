@@ -10,7 +10,7 @@ export default class GameState extends State {
     this.world = new World(
       this.container,
       context.textures,
-      context.sounds,
+      context.soundEffectsPlayer,
       LEVELS_DATA[0].world
     );
   }

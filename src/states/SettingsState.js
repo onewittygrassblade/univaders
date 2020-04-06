@@ -16,12 +16,21 @@ export default class SettingsState extends State {
       this.menu.updateMenuItemLabel(0, `Music ${this.context.musicPlayer.muted ? 'off' : 'on'}`);
       this.menu.updateSelectionMarkers();
     };
+    const toggleSoundEffectsMuted = () => {
+      this.context.soundEffectsPlayer.toggleMuted();
+      this.menu.updateMenuItemLabel(1, `Sound effects ${this.context.soundEffectsPlayer.muted ? 'off' : 'on'}`);
+      this.menu.updateSelectionMarkers();
+    };
     const popState = () => this.stateStack.popState();
 
     const menuItems = [
       {
         text: `Music ${this.context.musicPlayer.muted ? 'off' : 'on'}`,
         callback: toggleMusicMuted,
+      },
+      {
+        text: `Sound effects ${this.context.soundEffectsPlayer.muted ? 'off' : 'on'}`,
+        callback: toggleSoundEffectsMuted,
       },
       {
         text: 'Back',

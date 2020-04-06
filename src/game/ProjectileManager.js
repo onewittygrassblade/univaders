@@ -9,11 +9,11 @@ const isOutsideView = (sprite) => (
 );
 
 export default class ProjectileManager {
-  constructor(parent, texture, sound, startPos, fireInterval, projectileSpeed) {
+  constructor(parent, texture, startPos, fireInterval, projectileSpeed, playSound) {
     this.parent = parent;
     this.texture = texture;
-    this.sound = sound;
     this.startPos = startPos;
+    this.playSound = playSound;
 
     this.projectiles = [];
     this.container = new ParticleContainer();
@@ -40,9 +40,7 @@ export default class ProjectileManager {
     }
     this.container.addChild(projectile);
 
-    if (this.sound) {
-      this.sound.play();
-    }
+    this.playSound();
   }
 
   clear() {

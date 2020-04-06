@@ -16,10 +16,10 @@ import hitTestRectangle from '../helpers/hitTestRectangle';
 import { randomInt } from '../helpers/RandomNumbers';
 
 export default class World {
-  constructor(gameContainer, textures, sounds, levelData) {
+  constructor(gameContainer, textures, soundEffectsPlayer, levelData) {
     this.container = gameContainer;
     this.textures = textures;
-    this.sounds = sounds;
+    this.soundEffectsPlayer = soundEffectsPlayer;
     this.levelData = levelData;
 
     this.score = 0;
@@ -61,10 +61,10 @@ export default class World {
     this.dragonProjectileManager = new ProjectileManager(
       this.dragon,
       this.textures['heart_red.png'],
-      this.sounds.soft,
       'top',
       600,
-      0.4
+      0.4,
+      () => this.soundEffectsPlayer.play('soft')
     );
     this.container.addChild(this.dragonProjectileManager.container);
   }
@@ -76,10 +76,10 @@ export default class World {
       const projectileManager = new ProjectileManager(
         unicorn,
         this.textures['heart_blue.png'],
-        null,
         'bottom',
         1500,
-        0.15
+        0.15,
+        () => {}
       );
       this.unicornProjectileManagers.push(projectileManager);
       this.container.addChild(projectileManager.container);
@@ -190,12 +190,12 @@ export default class World {
       this.pickUpActions.shift();
     }
 
-    this.sounds.extralife.play();
+    this.soundEffectsPlayer.play('extralife');
   }
 
   speedUpFire() {
     this.dragonProjectileManager.increaseFireRate();
-    this.sounds.powerup.play();
+    this.soundEffectsPlayer.play('powerup');
   }
 
   clearUnicornProjectiles() {
@@ -210,7 +210,7 @@ export default class World {
 
       projectileManager.clear();
     });
-    this.sounds.explosion.play();
+    this.soundEffectsPlayer.play('explosion');
   }
 
   clearDragonProjectiles() {
@@ -270,10 +270,10 @@ export default class World {
         const projectileManager = new ProjectileManager(
           unicorn,
           this.textures['heart_blue.png'],
-          null,
           'bottom',
           1500,
-          0.15
+          0.15,
+          () => {}
         );
         this.unicornProjectileManagers.push(projectileManager);
         this.container.addChild(projectileManager.container);
@@ -389,7 +389,7 @@ export default class World {
 
       if (hitUnicorn) {
         hitUnicorn.visible = false;
-        this.sounds.pop.play();
+        this.soundEffectsPlayer.play('pop');
         this.unicornEmitter.burst(
           7,
           hitUnicorn.getGlobalPosition().x + hitUnicorn.width / 2,
@@ -400,7 +400,7 @@ export default class World {
           this.dragonProjectileManager.stopFiring();
           this.clearUnicornProjectiles();
           this.clearDragonProjectiles();
-          this.sounds.levelcomplete.play();
+          this.soundEffectsPlayer.play('levelcomplete');
           this.timeManager.setTimeout(() => {
             this.hasUnicorns = false;
           }, 1500);
@@ -496,7 +496,7 @@ export default class World {
     );
     this.dragonProjectileManager.clear();
     this.dragonProjectileManager.stopFiring();
-    this.sounds.die.play();
+    this.soundEffectsPlayer.play('die');
   }
 
   loseLife() {

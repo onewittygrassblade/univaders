@@ -16,6 +16,11 @@ export default class PauseState extends State {
       this.menu.updateMenuItemLabel(1, `Music ${this.context.musicPlayer.muted ? 'off' : 'on'}`);
       this.menu.updateSelectionMarkers();
     };
+    const toggleSoundEffectsMuted = () => {
+      this.context.soundEffectsPlayer.toggleMuted();
+      this.menu.updateMenuItemLabel(2, `Sound effects ${this.context.soundEffectsPlayer.muted ? 'off' : 'on'}`);
+      this.menu.updateSelectionMarkers();
+    };
     const popState = () => this.stateStack.popState();
 
     const menuItems = [
@@ -26,6 +31,10 @@ export default class PauseState extends State {
       {
         text: `Music ${this.context.musicPlayer.muted ? 'off' : 'on'}`,
         callback: toggleMusicMuted,
+      },
+      {
+        text: `Sound effects ${this.context.soundEffectsPlayer.muted ? 'off' : 'on'}`,
+        callback: toggleSoundEffectsMuted,
       },
     ];
 

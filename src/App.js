@@ -4,7 +4,8 @@ import {
   Application,
 } from './const/aliases';
 
-import MusicPlayer from './MusicPlayer';
+import MusicPlayer from './sound/MusicPlayer';
+import SoundEffectsPlayer from './sound/SoundEffectsPlayer';
 import StateStack from './StateStack';
 import centerCanvas from './helpers/centerCanvas';
 
@@ -81,7 +82,7 @@ export default class App extends Application {
 
     const context = {
       textures,
-      sounds,
+      soundEffectsPlayer: new SoundEffectsPlayer(sounds),
       musicPlayer: new MusicPlayer(musics),
       stage: this.stage,
       gameStatus: '',
