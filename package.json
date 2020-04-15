@@ -18,6 +18,7 @@
   "author": "OneWittyGrassBlade",
   "license": "MIT",
   "dependencies": {
+    "@pixi/filter-color-overlay": "^3.1.1",
     "pixi-sound": "^3.0.4",
     "pixi.js": "^5.2.1"
   },

@@ -230,6 +230,7 @@
             <key type="filename">heart_blue_small.png</key>
             <key type="filename">heart_green_small.png</key>
             <key type="filename">heart_orange_small.png</key>
+            <key type="filename">heart_pink_small.png</key>
             <key type="filename">heart_red_small.png</key>
             <key type="filename">heart_white_small.png</key>
             <struct type="IndividualSpriteSettings">
@@ -276,6 +277,21 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">unicorn_big.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>67,66,134,131</rect>
+                <key>scale9Paddings</key>
+                <rect>67,66,134,131</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
         </map>
         <key>fileList</key>
         <array>
@@ -290,6 +306,8 @@
             <filename>heart_blue_small.png</filename>
             <filename>heart_red_small.png</filename>
             <filename>heart_orange_small.png</filename>
+            <filename>unicorn_big.png</filename>
+            <filename>heart_pink_small.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

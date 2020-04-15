@@ -12,7 +12,7 @@ const UNICORN_SPACING_Y = 100;
 const UNICORN_V_MIN = 0.03;
 const UNICORN_V_MAX = 0.1;
 
-export default class {
+export default class UnicornFluidManager {
   constructor(texture) {
     this.texture = texture;
 

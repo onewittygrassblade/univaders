@@ -9,10 +9,11 @@ const isOutsideView = (sprite) => (
 );
 
 export default class ProjectileManager {
-  constructor(parent, texture, startPos, fireInterval, projectileSpeed, playSound) {
+  constructor(parent, texture, startPos, startPosOffset, fireInterval, projectileSpeed, playSound) {
     this.parent = parent;
     this.texture = texture;
     this.startPos = startPos;
+    this.startPosOffset = startPosOffset;
     this.playSound = playSound;
 
     this.projectiles = [];
@@ -29,13 +30,15 @@ export default class ProjectileManager {
   addProjectile(projectile) {
     this.projectiles.push(projectile);
 
-    projectile.x = this.parent.getGlobalPosition().x + this.parent.width / 2 - projectile.width / 2;
+    projectile.x = this.parent.getGlobalPosition().x
+      + this.parent.width / 2 - projectile.width / 2
+      + this.startPosOffset.x;
 
     if (this.startPos === 'top') {
-      projectile.y = this.parent.getGlobalPosition().y - projectile.height;
+      projectile.y = this.parent.getGlobalPosition().y - projectile.height + this.startPosOffset.y;
       projectile.move('up');
     } else if (this.startPos === 'bottom') {
-      projectile.y = this.parent.getGlobalPosition().y + this.parent.height;
+      projectile.y = this.parent.getGlobalPosition().y + this.parent.height + this.startPosOffset.y;
       projectile.move('down');
     }
     this.container.addChild(projectile);

@@ -68,10 +68,18 @@ export default [
     },
   },
   {
-    hint: 'Uh oh...',
+    hint: 'Don\'t panic',
     world: {
       unicorns: {
         type: 'fluid',
+      },
+    },
+  },
+  {
+    hint: 'Uh oh...',
+    world: {
+      unicorns: {
+        type: 'boss',
       },
     },
   },
