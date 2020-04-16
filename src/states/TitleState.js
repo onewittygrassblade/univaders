@@ -9,7 +9,7 @@ export default class TitleState extends State {
     super(stateStack, context);
     this.createTitle();
     this.createMenu();
-    this.context.musicPlayer.play('StringedDisco');
+    this.context.musicPlayer.play('Stringed Disco');
   }
 
   createTitle() {

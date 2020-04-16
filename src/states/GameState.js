@@ -6,7 +6,6 @@ import LEVELS_DATA from '../const/levels';
 export default class GameState extends State {
   constructor(stateStack, context) {
     super(stateStack, context);
-    this.context.gameStatus = 'running';
     this.world = new World(
       this.container,
       context.textures,
@@ -36,7 +35,6 @@ export default class GameState extends State {
     }
 
     if (!this.world.hasAlivePlayer || this.world.unicornsHaveReachedBottom) {
-      this.context.gameStatus = 'failure';
       this.gameOver();
       return false;
     }
@@ -49,7 +47,6 @@ export default class GameState extends State {
         this.world.resetForNextLevel();
         this.stateStack.pushState('HintState');
       } else {
-        this.context.gameStatus = 'success';
         this.gameOver();
       }
     }

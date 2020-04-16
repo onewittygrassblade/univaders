@@ -6,16 +6,15 @@ export const SOUNDS = [
   'die',
   'explosion',
   'extralife',
-  'fail',
   'levelcomplete',
   'pop',
   'powerup',
   'soft',
-  'tada',
 ];
 
 export const MUSICS = [
-  'StringedDisco',
+  'Stringed Disco',
+  'Who Likes to Party',
 ];
 
 export const STATES = [

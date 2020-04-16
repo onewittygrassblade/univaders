@@ -316,6 +316,7 @@ export default class World {
       this.unicornEmitter.texture = this.textures['heart_pink_small.png'];
       this.unicornEmitter.particleLifetime = 3000;
 
+      this.score = 999;
       this.scoreText.text = '???';
     }
 

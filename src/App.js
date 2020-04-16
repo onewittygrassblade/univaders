@@ -85,7 +85,6 @@ export default class App extends Application {
       soundEffectsPlayer: new SoundEffectsPlayer(sounds),
       musicPlayer: new MusicPlayer(musics),
       stage: this.stage,
-      gameStatus: '',
       score: 0,
       level: 0,
     };
