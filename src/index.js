@@ -1,8 +1,9 @@
 import App from './App';
 
-App.loadAssets()
+const app = new App();
+
+app.boot()
   .then(() => {
-    const app = new App();
     app.setup();
     app.run();
   });

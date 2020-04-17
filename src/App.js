@@ -4,6 +4,7 @@ import {
   Application,
 } from './const/aliases';
 
+import LoadingBar from './LoadingBar';
 import MusicPlayer from './sound/MusicPlayer';
 import SoundEffectsPlayer from './sound/SoundEffectsPlayer';
 import StateStack from './StateStack';
@@ -18,7 +19,25 @@ import {
 } from './const/app';
 
 export default class App extends Application {
-  static loadAssets() {
+  constructor() {
+    super({ width: RENDERER_WIDTH, height: RENDERER_HEIGHT, backgroundColor: 0x000000 });
+  }
+
+  boot() {
+    // view
+    document.getElementById('root').appendChild(this.view);
+
+    centerCanvas(this.view);
+    window.addEventListener('resize', () => {
+      centerCanvas(this.view);
+    });
+
+    // loading bar
+    this.loadingBar = new LoadingBar();
+    this.loadingBar.container.y = RENDERER_HEIGHT / 2 - this.loadingBar.container.height / 2;
+    this.stage.addChild(this.loadingBar.container);
+
+    // assets
     return new Promise((resolve, reject) => {
       SOUNDS.forEach((soundName) => {
         loader.add(soundName, `sounds/${soundName}.mp3`);
@@ -32,23 +51,16 @@ export default class App extends Application {
         .add('images/univaders.json')
         .add('fonts/arcade-white.fnt')
         .add('fonts/arcade-green.fnt')
+        .on('progress', () => {
+          this.loadingBar.updateProgress(loader.progress);
+        })
         .on('error', reject)
         .load(resolve);
     });
   }
 
-  constructor() {
-    super({ width: RENDERER_WIDTH, height: RENDERER_HEIGHT, backgroundColor: 0x000000 });
-  }
-
   setup() {
-    // view
-    document.getElementById('root').appendChild(this.view);
-
-    centerCanvas(this.view);
-    window.addEventListener('resize', () => {
-      centerCanvas(this.view);
-    });
+    this.stage.removeChild(this.loadingBar.container);
 
     // event management
     this.events = [];
