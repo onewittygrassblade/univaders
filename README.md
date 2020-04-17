@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Univaders
 
 Space invaders inspired game featuring loving dragons and unicorns.
@@ -6,7 +8,13 @@ Space invaders inspired game featuring loving dragons and unicorns.
 
 ### Playing
 
-TODO
+This game is designed to be played in a browser using a keyboard. It will not work for mobile devices.
+
+Keys:
+* Space/Enter: choose a menu option
+* Left and right arrow keys: move dragon
+* Space: fire hearts
+* Escape: pause/resume game
 
 ### Development
 
@@ -55,4 +63,4 @@ http://creativecommons.org/licenses/by/3.0/
 
 ## License
 
-TODO
+This project is licensed under the MIT License. See the [LICENSE.md](LICENSE.md) file for details.
