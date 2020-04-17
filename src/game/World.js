@@ -435,31 +435,7 @@ export default class World {
 
       if (hitUnicorn) {
         if (this.levelData.unicorns.type === 'grid' || this.levelData.unicorns.type === 'fluid') {
-          hitUnicorn.visible = false;
-          this.soundEffectsPlayer.play('pop');
-          this.unicornEmitter.burst(
-            7,
-            hitUnicorn.getGlobalPosition().x + hitUnicorn.width / 2,
-            hitUnicorn.getGlobalPosition().y + hitUnicorn.height / 2
-          );
-
-          const unicornProjectileManager = this.unicornProjectileManagers.filter(
-            (projectileManager) => projectileManager.parent === hitUnicorn
-          )[0];
-
-          if (unicornProjectileManager) {
-            unicornProjectileManager.stopFiring();
-
-            if (this.levelData.unicorns.type === 'grid') {
-              const unicornAbove = this.unicornManager.getUnicornAbove(hitUnicorn);
-              if (unicornAbove) {
-                unicornProjectileManager.parent = unicornAbove;
-              }
-            }
-          }
-
-          this.score += 1;
-          this.scoreText.text = `${this.score}`;
+          this.popUnicorn(hitUnicorn);
         }
 
         projectile.shouldBeRemoved = true;
@@ -548,7 +524,13 @@ export default class World {
     );
 
     if (hitUnicorn) {
-      this.loseGame();
+      this.explodeDragon();
+      this.timeManager.setTimeout(() => {
+        this.loseLife();
+        this.hasAlivePlayer = false;
+      }, 1500);
+
+      this.popUnicorn(hitUnicorn);
     }
   }
 
@@ -560,6 +542,34 @@ export default class World {
 
   hasLives() {
     return this.numberOfLives > 0;
+  }
+
+  popUnicorn(unicorn) {
+    unicorn.visible = false;
+    this.soundEffectsPlayer.play('pop');
+    this.unicornEmitter.burst(
+      7,
+      unicorn.getGlobalPosition().x + unicorn.width / 2,
+      unicorn.getGlobalPosition().y + unicorn.height / 2
+    );
+
+    const unicornProjectileManager = this.unicornProjectileManagers.filter(
+      (projectileManager) => projectileManager.parent === unicorn
+    )[0];
+
+    if (unicornProjectileManager) {
+      unicornProjectileManager.stopFiring();
+
+      if (this.levelData.unicorns.type === 'grid') {
+        const unicornAbove = this.unicornManager.getUnicornAbove(unicorn);
+        if (unicornAbove) {
+          unicornProjectileManager.parent = unicornAbove;
+        }
+      }
+    }
+
+    this.score += 1;
+    this.scoreText.text = `${this.score}`;
   }
 
   explodeDragon() {
