@@ -7,6 +7,7 @@ import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 export default class SettingsState extends State {
   constructor(stateStack, context) {
     super(stateStack, context);
+
     this.build();
   }
 
@@ -55,7 +56,6 @@ export default class SettingsState extends State {
   }
 
   handleEvent(e) {
-    super.handleEvent(e);
     this.menu.handleEvent(e);
 
     return false;

@@ -6,6 +6,7 @@ import LEVELS_DATA from '../const/levels';
 export default class GameState extends State {
   constructor(stateStack, context) {
     super(stateStack, context);
+
     this.world = new World(
       this.container,
       context.textures,
@@ -15,7 +16,6 @@ export default class GameState extends State {
   }
 
   handleEvent(e) {
-    super.handleEvent(e);
     this.world.handleEvent(e);
 
     if (e.type === 'keyup' && e.keyCode === 27) {

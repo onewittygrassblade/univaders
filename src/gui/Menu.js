@@ -60,6 +60,7 @@ export default class Menu {
   handleEvent(e) {
     if (e.type === 'keyup') {
       switch (e.keyCode) {
+        case 13:
         case 32:
           this.menuItems[this.selectedMenuItem].callback();
           break;

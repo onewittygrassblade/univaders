@@ -9,6 +9,7 @@ import LEVELS_DATA from '../const/levels';
 export default class HintState extends State {
   constructor(stateStack, context) {
     super(stateStack, context);
+
     this.build();
   }
 
@@ -37,7 +38,6 @@ export default class HintState extends State {
   }
 
   handleEvent(e) {
-    super.handleEvent(e);
     if (e.type === 'keyup' && e.keyCode === 32) {
       this.stateStack.popState();
     }

@@ -141,8 +141,7 @@ export default class GameOverState extends State {
   }
 
   handleEvent(e) {
-    super.handleEvent(e);
-    if (e.type === 'keyup' && e.keyCode === 32) {
+    if (e.type === 'keyup' && (e.keyCode === 32 || e.keyCode === 13)) {
       this.context.gameStatus = '';
       this.context.score = 0;
       this.context.level = 0;

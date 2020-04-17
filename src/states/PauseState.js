@@ -7,6 +7,7 @@ import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 export default class PauseState extends State {
   constructor(stateStack, context) {
     super(stateStack, context);
+
     this.build();
   }
 
@@ -55,8 +56,6 @@ export default class PauseState extends State {
   }
 
   handleEvent(e) {
-    super.handleEvent(e);
-
     if (e.type === 'keyup' && e.keyCode === 27) {
       this.stateStack.popState();
       return false;
