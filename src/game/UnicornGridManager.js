@@ -38,17 +38,10 @@ export default class UnicornGridManager {
       }
     }
 
-    this.container.x = RENDERER_WIDTH / 2 - this.container.width / 2;
-    this.width = this.container.width; // Need to save this for hasReachedEdge
+    this.width = this.container.width;
   }
 
   setup(grid) {
-    this.container.y = 140;
-    this.moveCountdown = 0;
-    this.moveInterval = 1000;
-    this.dx = 10;
-    this.dy = 0;
-
     let unicorn;
     let n = 0;
 
@@ -64,6 +57,13 @@ export default class UnicornGridManager {
         n += 1;
       }
     }
+
+    this.container.x = RENDERER_WIDTH / 2 - this.width / 2;
+    this.container.y = 140;
+    this.moveCountdown = 0;
+    this.moveInterval = 1000;
+    this.dx = 10;
+    this.dy = 0;
   }
 
   hasVisibleUnicorns() {
