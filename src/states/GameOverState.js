@@ -44,18 +44,18 @@ export default class GameOverState extends State {
     }
     this.unicornsContainer.x = RENDERER_WIDTH / 2 - this.unicornsContainer.width / 2;
     this.unicornsContainer.y = yPos;
-    yPos += 100;
+    yPos += 120;
     this.container.addChild(this.unicornsContainer);
 
-    const titleText = this.context.score === 999 ? 'amazing!' : 'well done!';
+    const titleText = this.context.score === 999 ? 'Amazing!' : 'Well done!';
     const title = new BitmapText(titleText, { font: '180px arcade-white' });
     title.x = RENDERER_WIDTH / 2 - title.width / 2;
     title.y = yPos;
-    yPos += 200;
+    yPos += 180;
     this.container.addChild(title);
 
     const scoreContainer = new Container();
-    const text1 = new BitmapText('you scored:', { font: '72px arcade-white' });
+    const text1 = new BitmapText('You scored:', { font: '72px arcade-white' });
     scoreContainer.addChild(text1);
     const score = this.context.score === 999 ? 'infinity' : this.context.score.toString();
     const scoreText = new BitmapText(score, { font: '72px arcade-green' });
@@ -82,7 +82,7 @@ export default class GameOverState extends State {
 
     const hintContainer = new Container();
 
-    const hint = new BitmapText('back to title', { font: '72px arcade-white' });
+    const hint = new BitmapText('Back to title', { font: '72px arcade-white' });
     hint.x = RENDERER_WIDTH / 2 - hint.width / 2;
     hint.y = yPos;
     hintContainer.addChild(hint);
