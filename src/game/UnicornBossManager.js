@@ -89,7 +89,7 @@ export default class UnicornBossManager {
     this.unicorn.update(dt);
 
     const { x } = this.unicorn.getGlobalPosition();
-    if (x <= 30 || x >= RENDERER_WIDTH - this.unicorn.width - 30) {
+    if (x <= 50 || x >= RENDERER_WIDTH - this.unicorn.width - 50) {
       this.unicorn.vx = -this.unicorn.vx;
     }
 

@@ -301,7 +301,7 @@ export default class World {
           this.unicornManager.unicorn,
           this.textures['heart_blue.png'],
           'bottom',
-          { x: xOffset, y: -50 },
+          { x: xOffset, y: 0 },
           500,
           0.15,
           () => {}
@@ -414,7 +414,7 @@ export default class World {
         const xLeft = this.unicornManager.unicorn.getGlobalPosition().x;
         const xRight = xLeft + this.unicornManager.unicorn.width;
 
-        shouldFire = dragonPosX >= xLeft && dragonPosX <= xRight;
+        shouldFire = dragonPosX >= xLeft - tolerance && dragonPosX <= xRight + tolerance;
       }
 
       if (shouldFire && !projectileManager.isFiring) {
