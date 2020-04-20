@@ -27,6 +27,8 @@ export default class GameOverState extends State {
     this.blinkingTimer = 0;
     this.blinkingPeriod = 490;
     this.blinkingIndex = 1;
+    this.canHandleKeyEvents = false;
+
     this.build();
   }
 
@@ -78,10 +80,12 @@ export default class GameOverState extends State {
     }, 2000);
     this.container.addChild(this.punchlineText);
 
+    const hintContainer = new Container();
+
     const hint = new BitmapText('back to title', { font: '72px arcade-white' });
     hint.x = RENDERER_WIDTH / 2 - hint.width / 2;
     hint.y = yPos;
-    this.container.addChild(hint);
+    hintContainer.addChild(hint);
 
     const leftSelectionMarker = new BitmapText('.', { font: '72px arcade-white' });
     const rightSelectionMarker = new BitmapText('.', { font: '72px arcade-white' });
@@ -89,8 +93,20 @@ export default class GameOverState extends State {
     leftSelectionMarker.y = hint.y - 14;
     rightSelectionMarker.x = hint.x + hint.width + 8;
     rightSelectionMarker.y = hint.y - 14;
-    this.container.addChild(leftSelectionMarker);
-    this.container.addChild(rightSelectionMarker);
+    hintContainer.addChild(leftSelectionMarker);
+    hintContainer.addChild(rightSelectionMarker);
+
+    hintContainer.children.forEach((child) => {
+      child.visible = false;
+    });
+
+    this.container.addChild(hintContainer);
+    this.timeManager.setTimeout(() => {
+      hintContainer.children.forEach((child) => {
+        child.visible = true;
+      });
+      this.canHandleKeyEvents = true;
+    }, 4100);
 
     this.dragon = new Sprite(this.context.textures['dragon.png']);
     this.dragon.x = 130;
@@ -141,6 +157,10 @@ export default class GameOverState extends State {
   }
 
   handleEvent(e) {
+    if (!this.canHandleKeyEvents) {
+      return false;
+    }
+
     if (e.type === 'keyup' && (e.keyCode === 32 || e.keyCode === 13)) {
       this.context.gameStatus = '';
       this.context.score = 0;
