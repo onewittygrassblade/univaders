@@ -1,6 +1,7 @@
 import GameOverState from './states/GameOverState';
 import GameState from './states/GameState';
 import HintState from './states/HintState';
+import InputState from './states/InputState';
 import PauseState from './states/PauseState';
 import SettingsState from './states/SettingsState';
 import TitleState from './states/TitleState';
@@ -9,6 +10,7 @@ const stateClasses = {
   GameOverState,
   GameState,
   HintState,
+  InputState,
   PauseState,
   SettingsState,
   TitleState,

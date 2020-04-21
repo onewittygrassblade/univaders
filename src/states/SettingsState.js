@@ -56,8 +56,12 @@ export default class SettingsState extends State {
   }
 
   handleEvent(e) {
-    this.menu.handleEvent(e);
+    if (e.type === 'keyup' && e.keyCode === 27) {
+      this.stateStack.popState();
+      return false;
+    }
 
+    this.menu.handleEvent(e);
     return false;
   }
 }

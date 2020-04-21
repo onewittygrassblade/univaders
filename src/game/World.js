@@ -8,9 +8,11 @@ import UnicornGridManager from './UnicornGridManager';
 import UnicornFluidManager from './UnicornFluidManager';
 import UnicornBossManager from './UnicornBossManager';
 import ProjectileManager from './ProjectileManager';
+import VeggieManager from './VeggieManager';
 import Emitter from '../particle/Emitter';
 import PickUpManager from './PickUpManager';
 import TimeManager from '../helpers/TimeManager';
+import PubSub from '../helpers/PubSub';
 
 import contain from '../helpers/contain';
 import hitTestRectangle from '../helpers/hitTestRectangle';
@@ -35,11 +37,16 @@ export default class World {
     this.createScene();
     this.createDragonProjectileManager();
     this.createUnicornProjectileManagers();
+    this.createVeggieManaer();
     this.createEmitters();
     this.createScoreDisplay();
     this.createLivesDisplay();
     this.createPickUpManager();
     this.createPickUpActions();
+
+    PubSub.subscribe('codeEntered', (code) => {
+      this.handleCode(code);
+    });
   }
 
   createScene() {
@@ -52,7 +59,8 @@ export default class World {
     this.unicorns = this.unicornManager.container.children;
 
     // dragon
-    this.dragon = new Movable(this.textures['dragon.png'], 0.2);
+    this.dragonTexture = this.textures['dragon.png'];
+    this.dragon = new Movable(this.dragonTexture, 0.2);
     this.dragon.x = RENDERER_WIDTH / 2 - this.dragon.width / 2;
     this.dragon.y = RENDERER_HEIGHT - this.dragon.height;
     this.container.addChild(this.dragon);
@@ -88,6 +96,19 @@ export default class World {
       this.container.addChild(projectileManager.container);
       projectileManager.delay(1000);
     });
+  }
+
+  createVeggieManaer() {
+    this.veggieManager = new VeggieManager(
+      [
+        this.textures['radish.png'],
+        this.textures['broccoli.png'],
+        this.textures['turnip.png'],
+        this.textures['carrot.png'],
+      ],
+      () => this.soundEffectsPlayer.play('drop')
+    );
+    this.container.addChild(this.veggieManager.container);
   }
 
   createEmitters() {
@@ -152,7 +173,7 @@ export default class World {
 
     this.livesSpriteContainer = new Container();
     for (let i = 0; i < this.numberOfLives; i++) {
-      const life = new Sprite(this.textures['dragon.png']);
+      const life = new Sprite(this.dragonTexture);
       lifeWidth = life.width;
       life.x = i * (lifeWidth + 15);
       this.livesSpriteContainer.addChild(life);
@@ -184,7 +205,7 @@ export default class World {
   }
 
   gainLife() {
-    const life = new Sprite(this.textures['dragon.png']);
+    const life = new Sprite(this.dragonTexture);
     life.x = this.numberOfLives * (life.width + 15);
     this.livesSpriteContainer.addChild(life);
 
@@ -194,6 +215,18 @@ export default class World {
     }
 
     this.soundEffectsPlayer.play('extralife');
+  }
+
+  maxLives() {
+    while (this.numberOfLives < MAX_NUMBER_OF_LIVES) {
+      const life = new Sprite(this.dragonTexture);
+      life.x = this.numberOfLives * (life.width + 15);
+      this.livesSpriteContainer.addChild(life);
+
+      this.numberOfLives += 1;
+    }
+
+    this.pickUpActions.shift();
   }
 
   speedUpFire() {
@@ -360,6 +393,7 @@ export default class World {
     this.unicornManager.update(dt);
     this.dragonProjectileManager.update(dt);
     this.unicornProjectileManagers.forEach((projectileManager) => projectileManager.update(dt));
+    this.veggieManager.update(dt);
     this.unicornEmitter.update(dt);
     this.unicornHeartEmitter.update(dt);
     this.dragonHeartEmitter.update(dt);
@@ -434,54 +468,8 @@ export default class World {
       );
 
       if (hitUnicorn) {
-        if (this.levelData.unicorns.type === 'grid' || this.levelData.unicorns.type === 'fluid') {
-          this.popUnicorn(hitUnicorn);
-        }
-
         projectile.shouldBeRemoved = true;
-
-        if (this.levelData.unicorns.type === 'grid') {
-          this.unicornManager.increaseMoveRate();
-        }
-
-        if (this.levelData.unicorns.type === 'boss') {
-          this.unicornManager.receiveDamage();
-          this.soundEffectsPlayer.play('bubble');
-        }
-
-        if (!this.unicornManager.hasVisibleUnicorns()) {
-          this.hasClearedLevel = true;
-          this.dragonProjectileManager.stopFiring();
-          this.clearUnicornProjectiles();
-          this.clearDragonProjectiles();
-
-          if (this.levelData.unicorns.type === 'boss') {
-            this.unicornProjectileManagers.forEach((unicornProjectileManager) => {
-              unicornProjectileManager.stopFiring();
-            });
-
-
-            const x = hitUnicorn.getGlobalPosition().x + hitUnicorn.width / 2;
-            const y = hitUnicorn.getGlobalPosition().y + hitUnicorn.height / 2;
-            this.unicornEmitter.burst(9, x, y);
-            this.unicornEmitter.burst(9, x, y + 20);
-            this.unicornEmitter.burst(9, x, y - 20);
-            this.unicornEmitter.burst(9, x + 20, y);
-            this.unicornEmitter.burst(9, x + 20, y + 20);
-            this.unicornEmitter.burst(9, x + 20, y - 20);
-            this.unicornEmitter.burst(9, x - 20, y);
-            this.unicornEmitter.burst(9, x - 20, y + 20);
-            this.unicornEmitter.burst(9, x - 20, y + 20);
-            this.timeManager.setTimeout(() => {
-              this.hasUnicorns = false;
-            }, 3000);
-          } else {
-            this.soundEffectsPlayer.play('levelcomplete');
-            this.timeManager.setTimeout(() => {
-              this.hasUnicorns = false;
-            }, 1500);
-          }
-        }
+        this.processHitUnicorn(hitUnicorn);
       }
     });
 
@@ -531,6 +519,94 @@ export default class World {
       }, 1500);
 
       this.popUnicorn(hitUnicorn);
+    }
+
+    // veggies vs. unicorns, unicorn hearts and dragon
+    this.veggieManager.container.children.forEach((veggie) => {
+      const hitUnicorn2 = this.unicorns.find(
+        (unicorn) => {
+          if (this.levelData.unicorns.type === 'boss') {
+            return unicorn.visible && !veggie.hasHit && hitTestRectangle(unicorn, veggie, true);
+          }
+          return unicorn.visible && hitTestRectangle(unicorn, veggie, true);
+        }
+      );
+      if (hitUnicorn2) {
+        veggie.hasHit = true;
+        this.processHitUnicorn(hitUnicorn2);
+      }
+
+      this.unicornProjectileManagers.forEach((projectileManager) => {
+        const hitProjectile = projectileManager.projectiles.find(
+          (projectile) => hitTestRectangle(projectile, veggie, true)
+        );
+        if (hitProjectile) {
+          this.unicornHeartEmitter.burst(
+            7,
+            hitProjectile.getGlobalPosition().x + hitProjectile.width / 2,
+            hitProjectile.getGlobalPosition().y + hitProjectile.height / 2
+          );
+          hitProjectile.shouldBeRemoved = true;
+          this.soundEffectsPlayer.play('pop');
+        }
+      });
+
+      if (hitTestRectangle(this.dragon, veggie, true)) {
+        this.explodeDragon();
+        this.timeManager.setTimeout(() => {
+          this.loseLife();
+          this.hasAlivePlayer = false;
+        }, 1500);
+      }
+    });
+  }
+
+  processHitUnicorn(hitUnicorn) {
+    if (this.levelData.unicorns.type === 'grid' || this.levelData.unicorns.type === 'fluid') {
+      this.popUnicorn(hitUnicorn);
+    }
+
+    if (this.levelData.unicorns.type === 'grid') {
+      this.unicornManager.increaseMoveRate();
+    }
+
+    if (this.levelData.unicorns.type === 'boss') {
+      this.unicornManager.receiveDamage();
+      this.soundEffectsPlayer.play('bubble');
+    }
+
+    if (!this.unicornManager.hasVisibleUnicorns()) {
+      this.hasClearedLevel = true;
+      this.dragonProjectileManager.stopFiring();
+      this.clearUnicornProjectiles();
+      this.clearDragonProjectiles();
+
+      if (this.levelData.unicorns.type === 'boss') {
+        this.unicornProjectileManagers.forEach((unicornProjectileManager) => {
+          unicornProjectileManager.stopFiring();
+        });
+
+
+        const x = hitUnicorn.getGlobalPosition().x + hitUnicorn.width / 2;
+        const y = hitUnicorn.getGlobalPosition().y + hitUnicorn.height / 2;
+        this.unicornEmitter.burst(9, x, y);
+        this.unicornEmitter.burst(9, x, y + 20);
+        this.unicornEmitter.burst(9, x, y - 20);
+        this.unicornEmitter.burst(9, x + 20, y);
+        this.unicornEmitter.burst(9, x + 20, y + 20);
+        this.unicornEmitter.burst(9, x + 20, y - 20);
+        this.unicornEmitter.burst(9, x - 20, y);
+        this.unicornEmitter.burst(9, x - 20, y + 20);
+        this.unicornEmitter.burst(9, x - 20, y + 20);
+        this.timeManager.setTimeout(() => {
+          this.hasUnicorns = false;
+        }, 3000);
+      } else {
+        this.soundEffectsPlayer.play('levelcomplete');
+        this.timeManager.setTimeout(() => {
+          this.hasUnicorns = false;
+        }, 1500);
+      }
     }
   }
 
@@ -599,5 +675,29 @@ export default class World {
     this.timeManager.setTimeout(() => {
       this.unicornsHaveReachedBottom = true;
     }, 1500);
+  }
+
+  handleCode(code) {
+    if (code === 'cheat') {
+      this.soundEffectsPlayer.play('guitar');
+      this.dragonProjectileManager.setCheatFireRate();
+    } else if (code === 'lives') {
+      this.soundEffectsPlayer.play('guitar');
+      this.maxLives();
+    } else if (code === 'love') {
+      this.soundEffectsPlayer.play('guitar');
+      this.dragonTexture = this.textures['dragon_sunglasses.png'];
+      this.dragon.texture = this.dragonTexture;
+      this.livesSpriteContainer.children.forEach((life) => {
+        life.texture = this.dragonTexture;
+      });
+    } else if (code === 'veggies') {
+      this.soundEffectsPlayer.play('guitar');
+      this.timeManager.setTimeout(() => {
+        this.veggieManager.fire();
+      }, 100);
+    } else {
+      this.soundEffectsPlayer.play('denied');
+    }
   }
 }

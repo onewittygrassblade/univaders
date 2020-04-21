@@ -48,8 +48,11 @@ All sound effects are from freesound:
 * Lose_C_01 by [cabled_mess](https://freesound.org/people/cabled_mess/)
 * Pop 2 by [greenvwbeetle](https://freesound.org/people/greenvwbeetle/)
 * Retro arcade video game end or completed tone by [alanmcki](https://freesound.org/people/alanmcki)
+* Retro_Drop_01 by [MATTIX](https://freesound.org/people/MATTIX)
 * Retro_Spiraled_Gone by [MATTIX](https://freesound.org/people/MATTIX)
 * Retro_Underwater_Explosion by [MATTIX](https://freesound.org/people/MATTIX)
+* Spacey Loose by [GameAudio](https://freesound.org/people/GameAudio)
+* Victory (Rock Guitar Tapping) by [DeathToMayo](https://freesound.org/people/DeathToMayo)
 
 ### Music
 

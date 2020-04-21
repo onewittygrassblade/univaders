@@ -117,7 +117,7 @@
             <key>basic</key>
             <struct type="AlgorithmBasicSettings">
                 <key>sortBy</key>
-                <enum type="AlgorithmBasicSettings::SortBy">Best</enum>
+                <enum type="AlgorithmBasicSettings::SortBy">Name</enum>
                 <key>order</key>
                 <enum type="AlgorithmBasicSettings::Order">Ascending</enum>
             </struct>
@@ -196,6 +196,36 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">broccoli.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>13,15,27,30</rect>
+                <key>scale9Paddings</key>
+                <rect>13,15,27,30</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">carrot.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>5,15,11,30</rect>
+                <key>scale9Paddings</key>
+                <rect>5,15,11,30</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">dragon.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -208,6 +238,21 @@
                 <rect>25,14,50,27</rect>
                 <key>scale9Paddings</key>
                 <rect>25,14,50,27</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">dragon_sunglasses.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>3,0,5,1</rect>
+                <key>scale9Paddings</key>
+                <rect>3,0,5,1</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
@@ -277,6 +322,36 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
+            <key type="filename">radish.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>12,15,24,30</rect>
+                <key>scale9Paddings</key>
+                <rect>12,15,24,30</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">turnip.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>8,15,15,30</rect>
+                <key>scale9Paddings</key>
+                <rect>8,15,15,30</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">unicorn.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
@@ -324,6 +399,11 @@
             <filename>unicorn_big.png</filename>
             <filename>heart_pink_small.png</filename>
             <filename>guitar.png</filename>
+            <filename>dragon_sunglasses.png</filename>
+            <filename>broccoli.png</filename>
+            <filename>carrot.png</filename>
+            <filename>radish.png</filename>
+            <filename>turnip.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

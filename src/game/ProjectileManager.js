@@ -67,6 +67,10 @@ export default class ProjectileManager {
     this.fireInterval -= 100;
   }
 
+  setCheatFireRate() {
+    this.fireInterval = 100;
+  }
+
   resetFireRate() {
     this.fireInterval = this.baseFireInterval;
   }

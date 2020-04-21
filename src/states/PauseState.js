@@ -12,10 +12,6 @@ export default class PauseState extends State {
   }
 
   build() {
-    const popState = () => {
-      this.stateStack.popState();
-    };
-
     const pushSettingsState = () => {
       this.stateStack.pushState('SettingsState');
     };
@@ -25,11 +21,15 @@ export default class PauseState extends State {
       this.stateStack.pushState('TitleState');
     };
 
+    const pushInputState = () => {
+      this.stateStack.pushState('InputState');
+    };
+
+    const popState = () => {
+      this.stateStack.popState();
+    };
+
     const menuItems = [
-      {
-        text: 'Resume',
-        callback: popState,
-      },
       {
         text: 'Settings',
         callback: pushSettingsState,
@@ -37,6 +37,14 @@ export default class PauseState extends State {
       {
         text: 'Back to title',
         callback: pushTitleState,
+      },
+      {
+        text: 'Enter code',
+        callback: pushInputState,
+      },
+      {
+        text: 'Resume',
+        callback: popState,
       },
     ];
 
