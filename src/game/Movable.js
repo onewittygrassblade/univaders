@@ -1,11 +1,10 @@
-import { Sprite } from '../const/aliases';
+import Entity from '../particle/Entity';
 
-export default class Movable extends Sprite {
+export default class Movable extends Entity {
   constructor(texture, velocity) {
     super(texture);
+
     this.velocity = velocity;
-    this.vx = 0;
-    this.vy = 0;
   }
 
   move(dir) {
@@ -29,10 +28,5 @@ export default class Movable extends Sprite {
   stop() {
     this.vx = 0;
     this.vy = 0;
-  }
-
-  update(dt) {
-    this.x += this.vx * dt;
-    this.y += this.vy * dt;
   }
 }
