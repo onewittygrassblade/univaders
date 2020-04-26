@@ -678,20 +678,20 @@ export default class World {
   }
 
   handleCode(code) {
-    if (code === 'cheat') {
+    if (code === 'perfect') {
       this.soundEffectsPlayer.play('guitar');
       this.dragonProjectileManager.setCheatFireRate();
-    } else if (code === 'lives') {
+    } else if (code === 'reinvent') {
       this.soundEffectsPlayer.play('guitar');
       this.maxLives();
-    } else if (code === 'love') {
+    } else if (code === 'fabulous') {
       this.soundEffectsPlayer.play('guitar');
       this.dragonTexture = this.textures['dragon_sunglasses.png'];
       this.dragon.texture = this.dragonTexture;
       this.livesSpriteContainer.children.forEach((life) => {
         life.texture = this.dragonTexture;
       });
-    } else if (code === 'veggies') {
+    } else if (code === 'natures') {
       this.soundEffectsPlayer.play('guitar');
       this.timeManager.setTimeout(() => {
         this.veggieManager.fire();
