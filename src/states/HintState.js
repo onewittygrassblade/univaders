@@ -19,7 +19,7 @@ export default class HintState extends State {
     const messageText = new BitmapText(LEVELS_DATA[this.context.level].hint, { font: '72px arcade-white' });
     messageText.y = 0;
     textContainer.addChild(messageText);
-    const hintText = new BitmapText('Press space to start', { font: '48px arcade-white' });
+    const hintText = new BitmapText('Press space to start', { font: '64px arcade-white' });
     hintText.y = 100;
     textContainer.addChild(hintText);
 
