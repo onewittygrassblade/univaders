@@ -308,11 +308,11 @@ export default class World {
   }
 
   handleEvent(e) {
-    if (e.type === 'keydown') {
-      if (!this.dragon.visible) {
-        return;
-      }
+    if (!this.dragon.visible) {
+      return;
+    }
 
+    if (e.type === 'keydown') {
       switch (e.keyCode) {
         case 37:
           this.dragon.move('left');
@@ -328,10 +328,19 @@ export default class World {
         default:
       }
     } else if (e.type === 'keyup') {
-      if (e.keyCode === 37 || e.keyCode === 39) {
-        this.dragon.stop();
-      } else if (e.keyCode === 32) {
-        this.dragonProjectileManager.stopFiring();
+      switch (e.keyCode) {
+        case 27:
+          this.dragon.stop();
+          this.dragonProjectileManager.stopFiring();
+          break;
+        case 32:
+          this.dragonProjectileManager.stopFiring();
+          break;
+        case 37:
+        case 39:
+          this.dragon.stop();
+          break;
+        default:
       }
     }
   }
