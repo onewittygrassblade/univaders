@@ -5,7 +5,9 @@ import { Container } from '../const/aliases';
 import { RENDERER_WIDTH } from '../const/app';
 
 import Movable from './Movable';
-import { randomFloat } from '../helpers/RandomNumbers';
+import UnicornBaseManager from './UnicornBaseManager';
+
+import { randomFloat, flipCoin } from '../helpers/RandomNumbers';
 
 const V_MIN = 0.15;
 const V_MAX = 0.25;
@@ -42,21 +44,19 @@ const COLOURS = [
   0xff00f5,
 ];
 
-export default class UnicornBossManager {
+export default class UnicornBossManager extends UnicornBaseManager {
   constructor(texture) {
-    this.texture = texture;
+    super(texture);
+
     this.hp = 0;
     this.changeVelocityCountdown = 0;
     this.changeVelocityInterval = 1000;
-
-    this.setup();
   }
 
   setup() {
-    this.container = new Container();
-
     this.unicorn = new Movable(this.texture);
     this.container.addChild(this.unicorn);
+    this.unicorns.push(this.unicorn);
 
     this.container.x = RENDERER_WIDTH / 2 - this.container.width / 2;
     this.container.y = 140;
@@ -71,20 +71,6 @@ export default class UnicornBossManager {
     }
   }
 
-  hasVisibleUnicorns() {
-    return this.hp < 30;
-  }
-
-  /* eslint-disable class-methods-use-this */
-  flipCoin() {
-    return randomFloat(0, 1) <= 0.5;
-  }
-
-  hasReachedBottom() {
-    return false;
-  }
-  /* eslint-enable class-methods-use-this */
-
   update(dt) {
     this.unicorn.update(dt);
 
@@ -98,7 +84,7 @@ export default class UnicornBossManager {
       return;
     }
 
-    this.unicorn.vx = randomFloat(V_MIN, V_MAX) * (this.flipCoin() ? 1 : -1);
+    this.unicorn.vx = randomFloat(V_MIN, V_MAX) * (flipCoin() ? 1 : -1);
 
     this.changeVelocityCountdown = this.changeVelocityInterval;
   }

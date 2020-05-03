@@ -1,82 +1,61 @@
 import { Container, Sprite } from '../const/aliases';
 
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
-import { NUM_UNICORNS, UNICORN_SPACING } from '../const/world';
 
-export default class UnicornGridManager {
-  constructor(texture, grid) {
-    this.texture = texture;
+import UnicornBaseManager from './UnicornBaseManager';
 
-    this.createPositions();
-    this.createSprites();
-    this.setup(grid);
-  }
+const NUM_UNICORNS = {
+  rows: 7,
+  cols: 10,
+};
 
-  createPositions() {
-    this.xPositions = [];
-    this.yPositions = [];
+const UNICORN_SPACING = {
+  x: 100,
+  y: 60,
+};
 
-    for (let i = 0; i < NUM_UNICORNS.rows; i++) {
-      this.yPositions.push(i * UNICORN_SPACING.y);
-    }
-    for (let j = 0; j < NUM_UNICORNS.cols; j++) {
-      this.xPositions.push(j * UNICORN_SPACING.x);
-    }
-  }
+const X_POS = Array.from(
+  Array(NUM_UNICORNS.cols),
+  (_, i) => i * UNICORN_SPACING.x
+);
 
-  createSprites() {
-    this.container = new Container();
-    this.unicorns = [];
+const Y_POS = Array.from(
+  Array(NUM_UNICORNS.rows),
+  (_, i) => i * UNICORN_SPACING.y
+);
 
-    for (let i = 0; i < NUM_UNICORNS.rows; i++) {
-      for (let j = 0; j < NUM_UNICORNS.cols; j++) {
-        const unicorn = new Sprite(this.texture);
-        unicorn.x = j * UNICORN_SPACING.x;
-        unicorn.y = i * UNICORN_SPACING.y;
-        this.container.addChild(unicorn);
-        this.unicorns.push(unicorn);
-      }
-    }
+const WIDTH = NUM_UNICORNS.cols * 45 + (NUM_UNICORNS.cols - 1) * (UNICORN_SPACING.x - 45);
 
-    this.width = this.container.width;
-  }
+export default class UnicornGridManager extends UnicornBaseManager {
+  constructor(texture) {
+    super(texture);
 
-  setup(grid) {
-    let unicorn;
-    let n = 0;
-
-    for (let i = 0; i < NUM_UNICORNS.rows; i++) {
-      for (let j = 0; j < NUM_UNICORNS.cols; j++) {
-        unicorn = this.unicorns[n];
-
-        if (grid[i][j] === 0) {
-          unicorn.visible = false;
-        } else {
-          unicorn.visible = true;
-        }
-        n += 1;
-      }
-    }
-
-    this.container.x = RENDERER_WIDTH / 2 - this.width / 2;
-    this.container.y = 140;
     this.moveCountdown = 0;
     this.moveInterval = 1000;
     this.dx = 10;
     this.dy = 0;
   }
 
-  hasVisibleUnicorns() {
-    const visibleUnicorns = this.unicorns.filter(
-      (unicorn) => unicorn.visible
-    );
-    return visibleUnicorns.length > 0;
+  setup(grid) {
+    for (let i = 0; i < NUM_UNICORNS.rows; i++) {
+      for (let j = 0; j < NUM_UNICORNS.cols; j++) {
+        const unicorn = new Sprite(this.texture);
+        unicorn.x = j * UNICORN_SPACING.x;
+        unicorn.y = i * UNICORN_SPACING.y;
+        unicorn.visible = grid[i][j] > 0;
+        this.container.addChild(unicorn);
+        this.unicorns.push(unicorn);
+      }
+    }
+
+    this.container.x = RENDERER_WIDTH / 2 - WIDTH / 2;
+    this.container.y = 140;
   }
 
-  getLowerUnicorns() {
-    const maxYPos = Math.max(...this.yPositions);
+  getFiringUnicorns() {
+    const maxYPos = Math.max(...Y_POS);
 
-    return this.xPositions.reduce((acc, xPos) => {
+    return X_POS.reduce((acc, xPos) => {
       const visibleUnicorns = this.unicorns.filter(
         (unicorn) => unicorn.visible && unicorn.x === xPos
       );
@@ -92,12 +71,23 @@ export default class UnicornGridManager {
     }, []);
   }
 
-  increaseMoveRate() {
-    if (this.moveInterval <= 200) {
-      return;
+  getUnicornAbove(refUnicorn) {
+    const unicornsAbove = this.container.children.filter(
+      (unicorn) => unicorn.visible && unicorn.x === refUnicorn.x
+    );
+    if (unicornsAbove.length > 0) {
+      return unicornsAbove[unicornsAbove.length - 1];
     }
+    return null;
+  }
 
+  increaseMoveRate() {
+    if (this.moveInterval <= 200) return;
     this.moveInterval -= 20;
+  }
+
+  hasReachedBottom() {
+    return this.container.y >= RENDERER_HEIGHT - this.container.height;
   }
 
   update(dt) {
@@ -118,20 +108,6 @@ export default class UnicornGridManager {
 
   hasReachedEdge() {
     return (this.container.x <= 30 && this.dx < 0)
-      || (this.container.x >= RENDERER_WIDTH - this.width - 30 && this.dx > 0);
-  }
-
-  hasReachedBottom() {
-    return this.container.y >= RENDERER_HEIGHT - this.container.height;
-  }
-
-  getUnicornAbove(refUnicorn) {
-    const unicornsAbove = this.container.children.filter(
-      (unicorn) => unicorn.visible && unicorn.x === refUnicorn.x
-    );
-    if (unicornsAbove.length > 0) {
-      return unicornsAbove[unicornsAbove.length - 1];
-    }
-    return null;
+      || (this.container.x >= RENDERER_WIDTH - WIDTH - 30 && this.dx > 0);
   }
 }

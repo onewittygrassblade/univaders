@@ -9,11 +9,14 @@ const isOutsideView = (sprite) => (
 );
 
 export default class ProjectileManager {
-  constructor(parent, texture, startPos, startPosOffset, fireInterval, projectileSpeed, playSound) {
+  constructor(parent, texture, offsets, direction, fireInterval, projectileSpeed, playSound) {
     this.parent = parent;
     this.texture = texture;
-    this.startPos = startPos;
-    this.startPosOffset = startPosOffset;
+    this.offsets = offsets;
+    this.direction = direction;
+    this.baseFireInterval = fireInterval;
+    this.fireInterval = fireInterval;
+    this.projectileSpeed = projectileSpeed;
     this.playSound = playSound;
 
     this.projectiles = [];
@@ -21,27 +24,19 @@ export default class ProjectileManager {
 
     this.isFiring = false;
     this.fireCountdown = 0;
-    this.baseFireInterval = fireInterval;
-    this.fireInterval = fireInterval;
-
-    this.projectileSpeed = projectileSpeed;
   }
 
-  addProjectile(projectile) {
-    this.projectiles.push(projectile);
-
+  addProjectile(projectile, offset) {
     projectile.x = this.parent.getGlobalPosition().x
       + this.parent.width / 2 - projectile.width / 2
-      + this.startPosOffset.x;
+      + offset.x;
+    projectile.y = this.parent.getGlobalPosition().y
+      + this.parent.height / 2 - projectile.height / 2
+      + offset.y;
+    projectile.move(this.direction);
 
-    if (this.startPos === 'top') {
-      projectile.y = this.parent.getGlobalPosition().y - projectile.height + this.startPosOffset.y;
-      projectile.move('up');
-    } else if (this.startPos === 'bottom') {
-      projectile.y = this.parent.getGlobalPosition().y + this.parent.height + this.startPosOffset.y;
-      projectile.move('down');
-    }
     this.container.addChild(projectile);
+    this.projectiles.push(projectile);
 
     this.playSound();
   }
@@ -106,7 +101,9 @@ export default class ProjectileManager {
     }
 
     if (this.isFiring) {
-      this.addProjectile(new Movable(this.texture, this.projectileSpeed));
+      this.offsets.forEach((offset) => {
+        this.addProjectile(new Movable(this.texture, this.projectileSpeed), offset);
+      });
       this.fireCountdown = this.fireInterval;
     }
   }

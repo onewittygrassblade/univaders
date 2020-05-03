@@ -3,33 +3,32 @@ import { Container } from '../const/aliases';
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 
 import Movable from './Movable';
-import { randomFloat } from '../helpers/RandomNumbers';
+import UnicornBaseManager from './UnicornBaseManager';
 
-const NUM_UNICORNS_COLS = 9;
-const NUM_UNICORNS_ROWS = 4;
-const UNICORN_SPACING_X = 100;
-const UNICORN_SPACING_Y = 100;
+import { randomFloat, flipCoin } from '../helpers/RandomNumbers';
+
+const NUM_UNICORNS = {
+  rows: 4,
+  cols: 9,
+};
+
+const UNICORN_SPACING = {
+  x: 100,
+  y: 100,
+};
+
 const UNICORN_V_MIN = 0.03;
 const UNICORN_V_MAX = 0.1;
 
-export default class UnicornFluidManager {
-  constructor(texture) {
-    this.texture = texture;
-
-    this.setup();
-  }
-
+export default class UnicornFluidManager extends UnicornBaseManager {
   setup() {
-    this.container = new Container();
-    this.unicorns = [];
-
-    for (let i = 0; i < NUM_UNICORNS_ROWS; i++) {
-      for (let j = 0; j < NUM_UNICORNS_COLS; j++) {
+    for (let i = 0; i < NUM_UNICORNS.rows; i++) {
+      for (let j = 0; j < NUM_UNICORNS.cols; j++) {
         const unicorn = new Movable(this.texture);
-        unicorn.x = j * UNICORN_SPACING_X;
-        unicorn.y = i * UNICORN_SPACING_Y;
-        unicorn.vx = randomFloat(UNICORN_V_MIN, UNICORN_V_MAX) * (this.flipCoin() ? 1 : -1);
-        unicorn.vy = randomFloat(UNICORN_V_MIN, UNICORN_V_MAX) * (this.flipCoin() ? 1 : -1);
+        unicorn.x = j * UNICORN_SPACING.x;
+        unicorn.y = i * UNICORN_SPACING.y;
+        unicorn.vx = randomFloat(UNICORN_V_MIN, UNICORN_V_MAX) * (flipCoin() ? 1 : -1);
+        unicorn.vy = randomFloat(UNICORN_V_MIN, UNICORN_V_MAX) * (flipCoin() ? 1 : -1);
         this.container.addChild(unicorn);
         this.unicorns.push(unicorn);
       }
@@ -38,27 +37,6 @@ export default class UnicornFluidManager {
     this.container.x = RENDERER_WIDTH / 2 - this.container.width / 2;
     this.container.y = 140;
   }
-
-  getUnicorns() {
-    return this.unicorns;
-  }
-
-  hasVisibleUnicorns() {
-    const visibleUnicorns = this.unicorns.filter(
-      (unicorn) => unicorn.visible
-    );
-    return visibleUnicorns.length > 0;
-  }
-
-  /* eslint-disable class-methods-use-this */
-  flipCoin() {
-    return randomFloat(0, 1) <= 0.5;
-  }
-
-  hasReachedBottom() {
-    return false;
-  }
-  /* eslint-enable class-methods-use-this */
 
   update(dt) {
     this.unicorns.forEach((unicorn) => {

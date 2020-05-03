@@ -8,3 +8,8 @@ export function randomInt(min, max) {
 export function randomFloat(min, max) {
   return Math.random() * (max - min) + min;
 }
+
+// Return true or false with 50-50 probability
+export function flipCoin() {
+  return randomFloat(0, 1) <= 0.5;
+}
