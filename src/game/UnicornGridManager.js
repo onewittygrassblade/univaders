@@ -32,7 +32,6 @@ export default class UnicornGridManager extends UnicornBaseManager {
     this.moveCountdown = 0;
     this.moveInterval = 1000;
     this.dx = 10;
-    this.dy = 0;
   }
 
   setup(grid) {
@@ -71,7 +70,7 @@ export default class UnicornGridManager extends UnicornBaseManager {
   }
 
   getUnicornAbove(refUnicorn) {
-    const unicornsAbove = this.container.children.filter(
+    const unicornsAbove = this.unicorns.filter(
       (unicorn) => unicorn.visible && unicorn.x === refUnicorn.x
     );
     if (unicornsAbove.length > 0) {
@@ -106,7 +105,10 @@ export default class UnicornGridManager extends UnicornBaseManager {
   }
 
   hasReachedEdge() {
-    return (this.container.x <= 30 && this.dx < 0)
-      || (this.container.x >= RENDERER_WIDTH - WIDTH - 30 && this.dx > 0);
+    const xPos = this.unicorns.filter((unicorn) => unicorn.visible)
+      .map((unicorn) => unicorn.getGlobalPosition().x);
+    const minX = Math.min(...xPos);
+    const maxX = Math.max(...xPos) + 45;
+    return (minX <= 30 && this.dx < 0) || (maxX >= RENDERER_WIDTH - 30 && this.dx > 0);
   }
 }
