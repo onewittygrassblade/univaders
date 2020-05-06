@@ -595,15 +595,18 @@ export default class World {
 
   explodeDragon() {
     this.dragon.canBeHit = false;
-
     this.dragon.visible = false;
+    this.dragon.stop();
+
     this.dragonEmitter.burst(
       24,
       this.dragon.getGlobalPosition().x + this.dragon.width / 2,
       RENDERER_HEIGHT
     );
+
     this.dragonProjectileManager.clear();
     this.dragonProjectileManager.stopFiring();
+
     this.soundEffectsPlayer.play('die');
   }
 
