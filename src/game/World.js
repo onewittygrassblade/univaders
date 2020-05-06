@@ -11,10 +11,10 @@ import ProjectileManager from './ProjectileManager';
 import VeggieManager from './VeggieManager';
 import Emitter from '../particle/Emitter';
 import PickUpManager from './PickUpManager';
-import processCollisions from '../helpers/processCollisions';
 import TimeManager from '../helpers/TimeManager';
 import PubSub from '../helpers/PubSub';
 
+import processCollisions from '../helpers/processCollisions';
 import contain from '../helpers/contain';
 import { randomInt } from '../helpers/RandomNumbers';
 

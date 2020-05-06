@@ -10,12 +10,13 @@ const isOutsideView = (sprite) => (
   sprite.x < -sprite.width || sprite.x > RENDERER_WIDTH
 );
 
+const EMISSION_INTERVAL = 3000;
+
 export default class PickUpManager {
   constructor(textures) {
     this.textures = textures;
     this.pickUps = [];
     this.container = new ParticleContainer();
-    this.frequency = 3000;
     this.timer = 0;
   }
 
@@ -53,7 +54,7 @@ export default class PickUpManager {
     });
 
     // process timer
-    if (this.timer < this.frequency) {
+    if (this.timer < EMISSION_INTERVAL) {
       this.timer += dt;
     } else {
       this.addPickup(new Movable(this.textures[randomInt(0, this.textures.length - 1)], 0.15));

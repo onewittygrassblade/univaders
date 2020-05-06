@@ -9,6 +9,7 @@ import { randomFloat, flipCoin } from '../helpers/RandomNumbers';
 
 const V_MIN = 0.15;
 const V_MAX = 0.25;
+const MAX_RECEIVED_DAMAGE = 30;
 const COLOURS = [
   0xfff9ff,
   0xfff3ff,
@@ -46,7 +47,7 @@ export default class UnicornBossManager extends UnicornBaseManager {
   constructor(texture) {
     super(texture);
 
-    this.hp = 0;
+    this.receivedDamage = 0;
     this.changeVelocityCountdown = 0;
     this.changeVelocityInterval = 1000;
   }
@@ -61,10 +62,10 @@ export default class UnicornBossManager extends UnicornBaseManager {
   }
 
   receiveDamage() {
-    this.unicorn.filters = [new ColorOverlayFilter(COLOURS[this.hp])];
-    this.hp += 1;
+    this.unicorn.filters = [new ColorOverlayFilter(COLOURS[this.receivedDamage])];
+    this.receivedDamage += 1;
 
-    if (this.hp === 30) {
+    if (this.receivedDamage === MAX_RECEIVED_DAMAGE) {
       this.unicorn.visible = false;
     }
   }
