@@ -1,11 +1,9 @@
 import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 
-import { Container } from '../const/aliases';
-
 import { RENDERER_WIDTH } from '../const/app';
 
-import Movable from './Movable';
 import UnicornBaseManager from './UnicornBaseManager';
+import Movable from './Movable';
 
 import { randomFloat, flipCoin } from '../helpers/RandomNumbers';
 

@@ -83,7 +83,7 @@ export default class ProjectileManager {
 
     // Remove projectiles that have collided with something
     this.projectiles.forEach((projectile) => {
-      if (projectile.shouldBeRemoved) {
+      if (!projectile.canBeHit) {
         this.container.removeChild(projectile);
         this.projectiles.splice(this.projectiles.indexOf(projectile), 1);
       }

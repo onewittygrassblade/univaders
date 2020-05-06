@@ -1,8 +1,7 @@
-import { Container, Sprite } from '../const/aliases';
-
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 
 import UnicornBaseManager from './UnicornBaseManager';
+import Movable from './Movable';
 
 const NUM_UNICORNS = {
   rows: 7,
@@ -39,7 +38,7 @@ export default class UnicornGridManager extends UnicornBaseManager {
   setup(grid) {
     for (let i = 0; i < NUM_UNICORNS.rows; i++) {
       for (let j = 0; j < NUM_UNICORNS.cols; j++) {
-        const unicorn = new Sprite(this.texture);
+        const unicorn = new Movable(this.texture);
         unicorn.x = j * UNICORN_SPACING.x;
         unicorn.y = i * UNICORN_SPACING.y;
         unicorn.visible = grid[i][j] > 0;

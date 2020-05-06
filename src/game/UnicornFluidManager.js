@@ -1,9 +1,7 @@
-import { Container } from '../const/aliases';
-
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
 
-import Movable from './Movable';
 import UnicornBaseManager from './UnicornBaseManager';
+import Movable from './Movable';
 
 import { randomFloat, flipCoin } from '../helpers/RandomNumbers';
 

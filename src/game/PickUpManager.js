@@ -41,7 +41,7 @@ export default class PickUpManager {
 
     // Remove pick ups that have collided with something
     this.pickUps.forEach((pickUp) => {
-      if (pickUp.shouldBeRemoved) {
+      if (!pickUp.canBeHit) {
         this.container.removeChild(pickUp);
         this.pickUps.splice(this.pickUps.indexOf(pickUp), 1);
       }

@@ -11,11 +11,11 @@ import ProjectileManager from './ProjectileManager';
 import VeggieManager from './VeggieManager';
 import Emitter from '../particle/Emitter';
 import PickUpManager from './PickUpManager';
+import processCollisions from '../helpers/processCollisions';
 import TimeManager from '../helpers/TimeManager';
 import PubSub from '../helpers/PubSub';
 
 import contain from '../helpers/contain';
-import hitTestRectangle from '../helpers/hitTestRectangle';
 import { randomInt } from '../helpers/RandomNumbers';
 
 const unicornClasses = {
@@ -35,7 +35,6 @@ export default class World {
 
     this.score = 0;
     this.numberOfLives = INITIAL_NUMBER_OF_LIVES;
-    this.dragonHit = false;
     this.hasClearedLevel = false;
     this.hasAlivePlayer = true;
     this.hasUnicorns = true;
@@ -80,8 +79,8 @@ export default class World {
   }
 
   setupUnicorns() {
-    const klass = unicornClass(this.levelData.unicorns.class);
-    this.unicornManager = new klass(this.textures[`${this.levelData.unicorns.texture}.png`]);
+    const Klass = unicornClass(this.levelData.unicorns.class);
+    this.unicornManager = new Klass(this.textures[`${this.levelData.unicorns.texture}.png`]);
     this.unicornManager.setup(this.levelData.unicorns.data);
 
     this.unicornProjectileManagers = [];
@@ -267,7 +266,7 @@ export default class World {
 
   resetAfterCrash() {
     this.hasAlivePlayer = true;
-    this.dragonHit = false;
+    this.dragon.canBeHit = true;
 
     this.dragon.visible = true;
     this.dragon.x = RENDERER_WIDTH / 2 - this.dragon.width / 2;
@@ -359,7 +358,7 @@ export default class World {
     this.pickUpManager.update(dt);
     this.timeManager.update(dt);
 
-    if (!this.dragonHit) {
+    if (this.dragon.canBeHit) {
       this.containDragon();
       this.checkUnicornFire();
       this.checkCollisions();
@@ -408,109 +407,105 @@ export default class World {
 
   checkCollisions() {
     // dragon hearts vs. unicorns
-    this.dragonProjectileManager.projectiles.forEach((projectile) => {
-      const hitUnicorn = this.unicornManager.unicorns.find(
-        (unicorn) => unicorn.visible
-          && hitTestRectangle(projectile, unicorn, true)
-      );
-
-      if (hitUnicorn) {
-        projectile.shouldBeRemoved = true;
-        this.processHitUnicorn(hitUnicorn);
+    processCollisions(
+      this.dragonProjectileManager.projectiles,
+      this.unicornManager.unicorns,
+      (projectile, unicorn) => {
+        projectile.canBeHit = false;
+        this.processHitUnicorn(unicorn);
       }
-    });
-
-    // unicorn hearts vs. dragon
-    this.unicornProjectileManagers.forEach((projectileManager) => {
-      const hitProjectile = projectileManager.projectiles.find(
-        (projectile) => !this.dragonHit && hitTestRectangle(projectile, this.dragon, true)
-      );
-
-      if (hitProjectile) {
-        this.explodeDragon();
-        this.timeManager.setTimeout(() => {
-          this.loseLife();
-          this.hasAlivePlayer = false;
-        }, 1500);
-      }
-    });
-
-    // dragon hearts vs. pick ups
-    this.dragonProjectileManager.projectiles.forEach((projectile) => {
-      const hitPickUp = this.pickUpManager.pickUps.find(
-        (pickUp) => hitTestRectangle(projectile, pickUp, true)
-      );
-
-      if (hitPickUp) {
-        this.pickUpActions[randomInt(0, this.pickUpActions.length - 1)]();
-        projectile.shouldBeRemoved = true;
-        hitPickUp.shouldBeRemoved = true;
-        this.pickUpEmitter.burst(
-          7,
-          hitPickUp.getGlobalPosition().x + hitPickUp.width / 2,
-          hitPickUp.getGlobalPosition().y + hitPickUp.height / 2
-        );
-      }
-    });
-
-    // dragon vs. unicorns
-    const hitUnicorn = this.unicornManager.unicorns.find(
-      (unicorn) => unicorn.visible && hitTestRectangle(unicorn, this.dragon, true)
     );
 
-    if (hitUnicorn) {
-      this.explodeDragon();
-      this.timeManager.setTimeout(() => {
-        this.loseLife();
-        this.hasAlivePlayer = false;
-      }, 1500);
-
-      this.popUnicorn(hitUnicorn);
-    }
-
-    // veggies vs. unicorns, unicorn hearts and dragon
-    this.veggieManager.container.children.forEach((veggie) => {
-      const hitUnicorn2 = this.unicornManager.unicorns.find(
-        (unicorn) => {
-          if (this.levelData.unicorns.type === 'boss') {
-            return unicorn.visible && !veggie.hasHit && hitTestRectangle(unicorn, veggie, true);
-          }
-          return unicorn.visible && hitTestRectangle(unicorn, veggie, true);
-        }
-      );
-      if (hitUnicorn2) {
-        veggie.hasHit = true;
-        this.processHitUnicorn(hitUnicorn2);
-      }
-
-      this.unicornProjectileManagers.forEach((projectileManager) => {
-        const hitProjectile = projectileManager.projectiles.find(
-          (projectile) => hitTestRectangle(projectile, veggie, true)
-        );
-        if (hitProjectile) {
-          this.unicornHeartEmitter.burst(
-            7,
-            hitProjectile.getGlobalPosition().x + hitProjectile.width / 2,
-            hitProjectile.getGlobalPosition().y + hitProjectile.height / 2
-          );
-          hitProjectile.shouldBeRemoved = true;
-          this.soundEffectsPlayer.play('pop');
-        }
-      });
-
-      if (hitTestRectangle(this.dragon, veggie, true)) {
+    // unicorn hearts vs. dragon
+    processCollisions(
+      this.unicornProjectileManagers
+        .map((projectileManager) => projectileManager.projectiles)
+        .flat(),
+      [this.dragon],
+      () => {
         this.explodeDragon();
         this.timeManager.setTimeout(() => {
           this.loseLife();
           this.hasAlivePlayer = false;
         }, 1500);
       }
-    });
+    );
+
+    // dragon hearts vs. pick ups
+    processCollisions(
+      this.dragonProjectileManager.projectiles,
+      this.pickUpManager.pickUps,
+      (projectile, pickUp) => {
+        this.pickUpActions[randomInt(0, this.pickUpActions.length - 1)]();
+        projectile.canBeHit = false;
+        pickUp.canBeHit = false;
+        this.pickUpEmitter.burst(
+          7,
+          pickUp.getGlobalPosition().x + pickUp.width / 2,
+          pickUp.getGlobalPosition().y + pickUp.height / 2
+        );
+      }
+    );
+
+    // dragon vs. unicorns
+    processCollisions(
+      this.unicornManager.unicorns,
+      [this.dragon],
+      (unicorn) => {
+        this.explodeDragon();
+        this.timeManager.setTimeout(() => {
+          this.loseLife();
+          this.hasAlivePlayer = false;
+        }, 1500);
+
+        this.popUnicorn(unicorn);
+      }
+    );
+
+    // veggies vs. unicorns
+    processCollisions(
+      this.veggieManager.container.children,
+      this.unicornManager.unicorns,
+      (veggie, unicorn) => {
+        veggie.canBeHit = this.levelData.unicorns.type !== 'boss';
+        this.processHitUnicorn(unicorn);
+      }
+    );
+
+    // veggies vs. unicorn hearts
+    processCollisions(
+      this.veggieManager.container.children,
+      this.unicornProjectileManagers
+        .map((projectileManager) => projectileManager.projectiles)
+        .flat(),
+      (veggie, projectile) => {
+        this.unicornHeartEmitter.burst(
+          7,
+          projectile.getGlobalPosition().x + projectile.width / 2,
+          projectile.getGlobalPosition().y + projectile.height / 2
+        );
+        projectile.canBeHit = false;
+        this.soundEffectsPlayer.play('pop');
+      }
+    );
+
+    // veggies vs. dragon
+    processCollisions(
+      this.veggieManager.container.children,
+      [this.dragon],
+      () => {
+        this.explodeDragon();
+        this.timeManager.setTimeout(() => {
+          this.loseLife();
+          this.hasAlivePlayer = false;
+        }, 1500);
+      }
+    );
   }
 
-  processHitUnicorn(hitUnicorn) {
+  processHitUnicorn(unicorn) {
     if (this.levelData.unicorns.type === 'grid' || this.levelData.unicorns.type === 'fluid') {
-      this.popUnicorn(hitUnicorn);
+      this.popUnicorn(unicorn);
     }
 
     if (this.levelData.unicorns.type === 'grid') {
@@ -534,8 +529,8 @@ export default class World {
         });
 
 
-        const x = hitUnicorn.getGlobalPosition().x + hitUnicorn.width / 2;
-        const y = hitUnicorn.getGlobalPosition().y + hitUnicorn.height / 2;
+        const x = unicorn.getGlobalPosition().x + unicorn.width / 2;
+        const y = unicorn.getGlobalPosition().y + unicorn.height / 2;
         this.unicornEmitter.burst(9, x, y);
         this.unicornEmitter.burst(9, x, y + 20);
         this.unicornEmitter.burst(9, x, y - 20);
@@ -599,7 +594,7 @@ export default class World {
   }
 
   explodeDragon() {
-    this.dragonHit = true;
+    this.dragon.canBeHit = false;
 
     this.dragon.visible = false;
     this.dragonEmitter.burst(
@@ -628,7 +623,7 @@ export default class World {
       return;
     }
 
-    switch(code) {
+    switch (code) {
       case 'perfect':
         this.dragonProjectileManager.setCheatFireRate();
         break;

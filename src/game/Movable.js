@@ -5,6 +5,7 @@ export default class Movable extends Entity {
     super(texture);
 
     this.velocity = velocity;
+    this.canBeHit = true;
   }
 
   move(dir) {
