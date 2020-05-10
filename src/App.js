@@ -24,7 +24,7 @@ export default class App extends Application {
   }
 
   boot() {
-    // view
+    // Set view
     document.getElementById('root').appendChild(this.view);
 
     centerCanvas(this.view);
@@ -32,37 +32,37 @@ export default class App extends Application {
       centerCanvas(this.view);
     });
 
-    // loading bar
+    // Create and render loading bar
     this.loadingBar = new LoadingBar();
     this.loadingBar.container.y = RENDERER_HEIGHT / 2 - this.loadingBar.container.height / 2;
     this.stage.addChild(this.loadingBar.container);
 
-    // assets
-    return new Promise((resolve, reject) => {
-      SOUNDS.forEach((soundName) => {
-        loader.add(soundName, `sounds/${soundName}.mp3`);
-      });
-
-      MUSICS.forEach((musicName) => {
-        loader.add(musicName, `music/${musicName}.mp3`);
-      });
-
-      loader
-        .add('images/univaders.json')
-        .add('fonts/arcade-white.fnt')
-        .add('fonts/arcade-green.fnt')
-        .on('progress', () => {
-          this.loadingBar.updateProgress(loader.progress);
-        })
-        .on('error', reject)
-        .load(resolve);
+    // Load assets
+    SOUNDS.forEach((soundName) => {
+      loader.add(soundName, `sounds/${soundName}.mp3`);
     });
+
+    MUSICS.forEach((musicName) => {
+      loader.add(musicName, `music/${musicName}.mp3`);
+    });
+
+    loader
+      .add('images/univaders.json')
+      .add('fonts/arcade-white.fnt')
+      .add('fonts/arcade-green.fnt')
+      .on('progress', () => {
+        this.loadingBar.updateProgress(loader.progress);
+      })
+      .on('error', () => {
+        console.err('Loading error'); // eslint-disable-line no-console
+      })
+      .load(this.handleLoadComplete.bind(this));
   }
 
-  setup() {
+  handleLoadComplete() {
     this.stage.removeChild(this.loadingBar.container);
 
-    // event management
+    // Create event collectors
     this.events = [];
     window.addEventListener(
       'keydown',
@@ -79,7 +79,7 @@ export default class App extends Application {
       }
     );
 
-    // context
+    // Create context
     const { textures } = resources['images/univaders.json'];
 
     const sounds = SOUNDS.reduce((acc, item) => {
@@ -101,23 +101,22 @@ export default class App extends Application {
       level: 0,
     };
 
-    // state stack
+    // Create state stack
     this.stateStack = new StateStack(context);
 
     STATES.forEach((state) => {
       this.stateStack.registerState(state);
     });
 
-    // start on title state
-    this.stateStack.pushState('TitleState');
-  }
-
-  run() {
+    // Set game loop
     // PIXI.Ticker uses a ratio that is 1 if FPS = 60, 2 if FPS = 2, etc.
     this.ticker.add((fpsRatio) => {
       this.processInput();
       this.stateStack.update((fpsRatio * 1000) / 60); // time per frame = 1000 / 60 ms
     });
+
+    // start on title state
+    this.stateStack.pushState('TitleState');
   }
 
   processInput() {
