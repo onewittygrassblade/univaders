@@ -1,7 +1,7 @@
 {
   "name": "univaders",
   "version": "1.0.0",
-  "description": "Space invaders clone featuring loving dragons and unicorns",
+  "description": "Space invaders inspired game built with PixiJS featuring loving dragons and unicorns",
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --config ./webpack.dev.js",

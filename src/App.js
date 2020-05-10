@@ -115,7 +115,7 @@ export default class App extends Application {
       this.stateStack.update((fpsRatio * 1000) / 60); // time per frame = 1000 / 60 ms
     });
 
-    // start on title state
+    // Start on title state
     this.stateStack.pushState('TitleState');
   }
 

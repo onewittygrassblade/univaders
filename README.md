@@ -8,7 +8,7 @@ Space invaders inspired game featuring loving dragons and unicorns.
 
 ### Playing
 
-This game is designed to be played in a browser using a keyboard. It will not work for mobile devices.
+This game is designed to be played in a browser using a keyboard. It will not work on mobile devices.
 
 Keys:
 * Space/Enter: choose a menu option
