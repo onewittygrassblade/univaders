@@ -156,7 +156,7 @@ export default class World {
   createScoreDisplay() {
     const scoreContainer = new Container();
 
-    const scoreLabelText = new BitmapText('MONTHS', { font: '64px arcade-white' });
+    const scoreLabelText = new BitmapText('SCORE', { font: '64px arcade-white' });
     scoreContainer.addChild(scoreLabelText);
 
     this.scoreText = new BitmapText(`${this.score}`, { font: '64px arcade-green' });
@@ -619,7 +619,7 @@ export default class World {
   }
 
   handleCode(code) {
-    if (['perfect', 'reinvent', 'fabulous', 'natures'].includes(code)) {
+    if (['caffeine', 'topup', 'fabulous', 'ratatouille'].includes(code)) {
       this.soundEffectsPlayer.play('guitar');
     } else {
       this.soundEffectsPlayer.play('denied');
@@ -627,16 +627,16 @@ export default class World {
     }
 
     switch (code) {
-      case 'perfect':
+      case 'caffeine':
         this.dragonProjectileManager.setCheatFireRate();
         break;
-      case 'reinvent':
+      case 'topup':
         this.maxLives();
         break;
       case 'fabulous':
         this.wearSunglasses();
         break;
-      case 'natures':
+      case 'ratatouille':
         this.timeManager.setTimeout(() => {
           this.veggieManager.fire();
         }, 100);

@@ -61,9 +61,6 @@ export default class GameOverState extends State {
     const scoreText = new BitmapText(score, { font: '72px arcade-green' });
     scoreText.x = text1.width + 44;
     scoreContainer.addChild(scoreText);
-    const text2 = new BitmapText('months...', { font: '72px arcade-white' });
-    text2.x = scoreText.x + scoreText.width + 44;
-    scoreContainer.addChild(text2);
     scoreContainer.x = RENDERER_WIDTH / 2 - scoreContainer.width / 2;
     scoreContainer.y = yPos;
     yPos += 80;
