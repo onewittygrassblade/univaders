@@ -17,6 +17,9 @@ export default class PauseState extends State {
     };
 
     const pushTitleState = () => {
+      this.context.gameStatus = '';
+      this.context.score = 0;
+      this.context.level = 0;
       this.stateStack.clearStates();
       this.stateStack.pushState('TitleState');
     };
