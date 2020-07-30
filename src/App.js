@@ -50,13 +50,14 @@ export default class App extends Application {
       .add('images/univaders.json')
       .add('fonts/arcade-white.fnt')
       .add('fonts/arcade-green.fnt')
-      .on('progress', () => {
-        this.loadingBar.updateProgress(loader.progress);
-      })
-      .on('error', () => {
-        console.err('Loading error'); // eslint-disable-line no-console
-      })
       .load(this.handleLoadComplete.bind(this));
+
+    loader.onProgress.add(() => {
+      this.loadingBar.updateProgress(loader.progress);
+    }); // called once per loaded/errored file
+    loader.onError.add(() => {
+      console.err('Loading error'); // eslint-disable-line no-console
+    }); // called once per errored file
   }
 
   handleLoadComplete() {

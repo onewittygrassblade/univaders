@@ -528,7 +528,6 @@ export default class World {
           unicornProjectileManager.stopFiring();
         });
 
-
         const x = unicorn.getGlobalPosition().x + unicorn.width / 2;
         const y = unicorn.getGlobalPosition().y + unicorn.height / 2;
         this.unicornEmitter.burst(9, x, y);
