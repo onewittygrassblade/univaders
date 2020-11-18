@@ -1,6 +1,7 @@
 import { ColorOverlayFilter } from '@pixi/filter-color-overlay';
 
 import { BitmapText, Container, Sprite } from '../const/aliases';
+import { FONT_WHITE_M, FONT_WHITE_XL, FONT_GREEN_M } from '../const/fonts';
 
 import State from './State';
 import TimeManager from '../helpers/TimeManager';
@@ -48,17 +49,17 @@ export default class GameOverState extends State {
     this.container.addChild(this.unicornsContainer);
 
     const titleText = this.context.score === 999 ? 'Amazing!' : 'Well done!';
-    const title = new BitmapText(titleText, { font: '180px arcade-white' });
+    const title = new BitmapText(titleText, FONT_WHITE_XL);
     title.x = RENDERER_WIDTH / 2 - title.width / 2;
     title.y = yPos;
     yPos += 180;
     this.container.addChild(title);
 
     const scoreContainer = new Container();
-    const text1 = new BitmapText('You scored:', { font: '72px arcade-white' });
+    const text1 = new BitmapText('You scored:', FONT_WHITE_M);
     scoreContainer.addChild(text1);
     const score = this.context.score === 999 ? 'infinity' : this.context.score.toString();
-    const scoreText = new BitmapText(score, { font: '72px arcade-green' });
+    const scoreText = new BitmapText(score, FONT_GREEN_M);
     scoreText.x = text1.width + 44;
     scoreContainer.addChild(scoreText);
     scoreContainer.x = RENDERER_WIDTH / 2 - scoreContainer.width / 2;
@@ -67,7 +68,7 @@ export default class GameOverState extends State {
     this.container.addChild(scoreContainer);
 
     const punchline = this.context.score === 999 ? '...and then some' : '...for now';
-    this.punchlineText = new BitmapText(punchline, { font: '72px arcade-white' });
+    this.punchlineText = new BitmapText(punchline, FONT_WHITE_M);
     this.punchlineText.x = RENDERER_WIDTH / 2 - this.punchlineText.width / 2;
     this.punchlineText.y = yPos;
     yPos += 180;
@@ -79,13 +80,13 @@ export default class GameOverState extends State {
 
     const hintContainer = new Container();
 
-    const hint = new BitmapText('Back to title', { font: '72px arcade-white' });
+    const hint = new BitmapText('Back to title', FONT_WHITE_M);
     hint.x = RENDERER_WIDTH / 2 - hint.width / 2;
     hint.y = yPos;
     hintContainer.addChild(hint);
 
-    const leftSelectionMarker = new BitmapText('.', { font: '72px arcade-white' });
-    const rightSelectionMarker = new BitmapText('.', { font: '72px arcade-white' });
+    const leftSelectionMarker = new BitmapText('.', FONT_WHITE_M);
+    const rightSelectionMarker = new BitmapText('.', FONT_WHITE_M);
     leftSelectionMarker.x = hint.x - leftSelectionMarker.width - 30;
     leftSelectionMarker.y = hint.y - 14;
     rightSelectionMarker.x = hint.x + hint.width + 8;

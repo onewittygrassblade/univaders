@@ -1,4 +1,5 @@
 import { BitmapText } from '../const/aliases';
+import { FONT_WHITE_XL } from '../const/fonts';
 
 import State from './State';
 import Menu from '../gui/Menu';
@@ -14,7 +15,7 @@ export default class TitleState extends State {
   }
 
   build() {
-    const title = new BitmapText('univaders', { font: '180px arcade-white' });
+    const title = new BitmapText('univaders', FONT_WHITE_XL);
     title.x = RENDERER_WIDTH / 2 - title.width / 2;
     title.y = 200;
     this.container.addChild(title);

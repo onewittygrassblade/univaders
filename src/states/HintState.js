@@ -1,4 +1,5 @@
 import { Container, BitmapText } from '../const/aliases';
+import { FONT_WHITE_S, FONT_WHITE_M } from '../const/fonts';
 
 import State from './State';
 import Rectangle from '../gui/Rectangle';
@@ -16,10 +17,10 @@ export default class HintState extends State {
   build() {
     const textContainer = new Container();
 
-    const messageText = new BitmapText(LEVELS_DATA[this.context.level].hint, { font: '72px arcade-white' });
+    const messageText = new BitmapText(LEVELS_DATA[this.context.level].hint, FONT_WHITE_M);
     messageText.y = 0;
     textContainer.addChild(messageText);
-    const hintText = new BitmapText('Press space to start', { font: '64px arcade-white' });
+    const hintText = new BitmapText('Press space to start', FONT_WHITE_S);
     hintText.y = 100;
     textContainer.addChild(hintText);
 

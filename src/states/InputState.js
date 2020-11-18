@@ -1,4 +1,5 @@
 import { BitmapText, Container } from '../const/aliases';
+import { FONT_WHITE_M } from '../const/fonts';
 
 import State from './State';
 import Rectangle from '../gui/Rectangle';
@@ -19,7 +20,7 @@ export default class InputState extends State {
 
     const inputBox = new Rectangle(478, 70);
 
-    this.input = new BitmapText('', { font: '72px arcade-white' });
+    this.input = new BitmapText('', FONT_WHITE_M);
     this.input.x = 15;
     this.input.y = 17;
 

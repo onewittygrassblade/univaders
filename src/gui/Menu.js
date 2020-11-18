@@ -1,4 +1,5 @@
 import { Container, BitmapText } from '../const/aliases';
+import { FONT_WHITE_M } from '../const/fonts';
 
 export default class Menu {
   constructor(menuItems) {
@@ -11,13 +12,13 @@ export default class Menu {
   build(menuItems) {
     this.container = new Container();
 
-    this.leftSelectionMarker = new BitmapText('.', { font: '72px arcade-white' });
-    this.rightSelectionMarker = new BitmapText('.', { font: '72px arcade-white' });
+    this.leftSelectionMarker = new BitmapText('.', FONT_WHITE_M);
+    this.rightSelectionMarker = new BitmapText('.', FONT_WHITE_M);
     this.container.addChild(this.leftSelectionMarker);
     this.container.addChild(this.rightSelectionMarker);
 
     menuItems.forEach((item, i) => {
-      const text = new BitmapText(item.text, { font: '72px arcade-white' });
+      const text = new BitmapText(item.text, FONT_WHITE_M);
       text.y = i * 100;
       this.container.addChild(text);
       text.callback = item.callback;

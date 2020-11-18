@@ -1,6 +1,7 @@
 import { Container, Sprite, BitmapText } from '../const/aliases';
 
 import { RENDERER_WIDTH, RENDERER_HEIGHT } from '../const/app';
+import { FONT_WHITE_S, FONT_GREEN_S } from '../const/fonts';
 import { INITIAL_NUMBER_OF_LIVES, MAX_NUMBER_OF_LIVES } from '../const/world';
 
 import Movable from './Movable';
@@ -156,10 +157,10 @@ export default class World {
   createScoreDisplay() {
     const scoreContainer = new Container();
 
-    const scoreLabelText = new BitmapText('SCORE', { font: '64px arcade-white' });
+    const scoreLabelText = new BitmapText('SCORE', FONT_WHITE_S);
     scoreContainer.addChild(scoreLabelText);
 
-    this.scoreText = new BitmapText(`${this.score}`, { font: '64px arcade-green' });
+    this.scoreText = new BitmapText(`${this.score}`, FONT_GREEN_S);
     this.scoreText.x = scoreLabelText.width + 20;
     scoreContainer.addChild(this.scoreText);
 
@@ -171,7 +172,7 @@ export default class World {
   createLivesDisplay() {
     const livesContainer = new Container();
 
-    const livesText = new BitmapText('LIVES', { font: '64px arcade-white' });
+    const livesText = new BitmapText('LIVES', FONT_WHITE_S);
     livesContainer.addChild(livesText);
 
     let lifeWidth;
@@ -422,7 +423,8 @@ export default class World {
         .map((projectileManager) => projectileManager.projectiles)
         .flat(),
       [this.dragon],
-      () => {
+      (projectile, _) => {
+        projectile.canBeHit = false;
         this.explodeDragon();
         this.timeManager.setTimeout(() => {
           this.loseLife();
