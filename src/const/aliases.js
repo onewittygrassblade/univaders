@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import 'pixi-sound';
+import '@pixi/sound';
 
 /* eslint-disable no-undef */
 export const loader = PIXI.Loader.shared;
