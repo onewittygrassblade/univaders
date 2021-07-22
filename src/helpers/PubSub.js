@@ -4,7 +4,7 @@ class PubSub {
   }
 
   subscribe(topic, callback) {
-    if (!this.topics.topic) this.topics[topic] = [];
+    if (!this.topics[topic]) this.topics[topic] = [];
     const index = this.topics[topic].push(callback) - 1;
     return () => delete this.topics[topic][index];
   }
